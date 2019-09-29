@@ -30,7 +30,7 @@ public class AccountRoutes {
         String id = exchange.getQueryParameters().get("id").getFirst();
 
         Account account = new Account();
-        account.setAccountId(Long.valueOf(id));
+        account.setId(Long.valueOf(id));
         account.setName("Rafael");
 
         exchange.getResponseSender().send(convertToJson(account));

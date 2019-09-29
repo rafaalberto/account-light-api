@@ -2,22 +2,22 @@ package com.api.account.model;
 
 public class Account {
 
-    private Long accountId;
+    private Long id;
     private String name;
 
     public Account() {}
 
-    public Account(Long accountId, String name) {
-        this.accountId = accountId;
+    public Account(Long id, String name) {
+        this.id = id;
         this.name = name;
     }
 
-    public Long getAccountId() {
-        return accountId;
+    public Long getId() {
+        return id;
     }
 
-    public void setAccountId(Long accountId) {
-        this.accountId = accountId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {

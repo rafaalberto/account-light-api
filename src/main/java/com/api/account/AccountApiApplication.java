@@ -1,15 +1,20 @@
 package com.api.account;
 
+import com.api.account.database.DatabaseConnection;
 import com.api.account.routes.AccountRoutes;
 import io.undertow.Undertow;
 import io.undertow.server.HttpServerExchange;
 import io.undertow.server.RoutingHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static com.api.account.constants.HttpConstants.APP_HOST;
 import static com.api.account.constants.HttpConstants.APP_PORT;
 import static io.undertow.util.Methods.*;
 
 public class AccountApiApplication {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(AccountApiApplication.class);
 
     private static final RoutingHandler ROUTES = new RoutingHandler()
             .add(GET, "/", AccountApiApplication::handleRequest)
@@ -24,6 +29,11 @@ public class AccountApiApplication {
         builder.setHandler(ROUTES);
         Undertow server = builder.build();
         server.start();
+
+        LOGGER.info("Server connected at " + APP_PORT);
+
+        DatabaseConnection.connect();
+        DatabaseConnection.createTables();
     }
 
     private static void handleRequest(HttpServerExchange exchange) {
