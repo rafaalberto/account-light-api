@@ -5,13 +5,6 @@ public class Account {
     private Long id;
     private String name;
 
-    public Account() {}
-
-    public Account(Long id, String name) {
-        this.id = id;
-        this.name = name;
-    }
-
     public Long getId() {
         return id;
     }

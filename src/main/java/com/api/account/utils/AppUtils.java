@@ -18,14 +18,13 @@ public class AppUtils {
         return null;
     }
 
-    public static <T> T readFromJson(String json) {
+    public static <T> T readFromJson(String json, TypeReference<T> typeReference) {
         var mapper = new ObjectMapper();
         try {
-            return mapper.readValue(json, new TypeReference<T>() {});
+            return mapper.readValue(json, typeReference);
         } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
     }
-
 }

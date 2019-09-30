@@ -1,11 +1,11 @@
 package com.api.account.routes;
 
 import com.api.account.model.Account;
+import com.api.account.repository.AccountDao;
+import com.fasterxml.jackson.core.type.TypeReference;
 import io.undertow.server.HttpServerExchange;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static com.api.account.constants.HttpConstants.*;
 import static com.api.account.utils.AppUtils.convertToJson;
@@ -18,9 +18,8 @@ public class AccountRoutes {
         exchange.setStatusCode(HTTP_OK_STATUS);
         exchange.getResponseHeaders().put(CONTENT_TYPE, HEADER_JSON);
 
-        List<Account> accounts = new ArrayList<>();
-        accounts.add(new Account(1L, "Rafa"));
-
+        AccountDao accountDao = new AccountDao();
+        List<Account> accounts = accountDao.findAll();
         exchange.getResponseSender().send(convertToJson(accounts));
     }
 
@@ -40,8 +39,12 @@ public class AccountRoutes {
         exchange.setStatusCode(HTTP_CREATED_STATUS);
         exchange.getResponseHeaders().put(CONTENT_TYPE, HEADER_JSON);
         exchange.getRequestReceiver().receiveFullString((serverExchange, message) -> {
-            var account = readFromJson(message);
-            exchange.getResponseSender().send(Optional.ofNullable(account).toString());
+            Account account = readFromJson(message, new TypeReference<>(){});
+            if(account != null) {
+                AccountDao accountDao = new AccountDao();
+                accountDao.save(account);
+                exchange.getResponseSender().send("Account saved successfully");
+            }
         });
     }
 

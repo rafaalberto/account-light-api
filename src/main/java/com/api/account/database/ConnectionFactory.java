@@ -4,9 +4,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-class ConnectionFactory {
+public class ConnectionFactory {
 
-    static Connection getConnection() {
+    public static Connection getConnection() {
         try {
             String databaseUrl = "jdbc:h2:~/test";
             String databaseUser = "sa";
