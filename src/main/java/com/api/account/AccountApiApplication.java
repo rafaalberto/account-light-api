@@ -21,6 +21,7 @@ public class AccountApiApplication {
             .add(GET, "/accounts", AccountRoutes::findAll)
             .add(GET, "/accounts/{id}", AccountRoutes::findById)
             .add(POST, "/accounts", AccountRoutes::create)
+            .add(PUT, "/accounts/{id}", AccountRoutes::update)
             .add(DELETE, "/accounts/{id}", AccountRoutes::delete);
 
     public static void main(String[] args) {

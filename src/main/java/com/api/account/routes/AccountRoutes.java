@@ -39,8 +39,22 @@ public class AccountRoutes {
         exchange.getRequestReceiver().receiveFullString((serverExchange, message) -> {
             Account account = readFromJson(message, new TypeReference<>(){});
             if(account != null) {
-                accountDao.save(account);
-                exchange.getResponseSender().send("Account saved successfully");
+                accountDao.insert(account);
+                exchange.getResponseSender().send("Account created successfully");
+            }
+        });
+    }
+
+    public static void update(HttpServerExchange exchange) {
+        exchange.setStatusCode(HTTP_CREATED_STATUS);
+        exchange.getResponseHeaders().put(CONTENT_TYPE, HEADER_JSON);
+        String id = exchange.getQueryParameters().get("id").getFirst();
+        exchange.getRequestReceiver().receiveFullString((serverExchange, message) -> {
+            Account account = readFromJson(message, new TypeReference<>(){});
+            if(account != null) {
+                account.setId(Long.valueOf(id));
+                accountDao.update(account);
+                exchange.getResponseSender().send("Account updated successfully");
             }
         });
     }

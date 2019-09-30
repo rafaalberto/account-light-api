@@ -18,12 +18,24 @@ public class AccountDao {
         this.connection = ConnectionFactory.getConnection();
     }
 
-    public void save(Account account) {
-        String sql = "insert into accounts (id, name) values (?, ?)";
+    public void insert(Account account) {
+        String sql = "insert into accounts (name) values (?)";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setLong(1, account.getId());
-            preparedStatement.setString(2, account.getName());
+            preparedStatement.setString(1, account.getName());
+            preparedStatement.execute();
+            preparedStatement.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void update(Account account) {
+        String sql = "update accounts set name = ? where id = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, account.getName());
+            preparedStatement.setLong(2, account.getId());
             preparedStatement.execute();
             preparedStatement.close();
         } catch (SQLException e) {
