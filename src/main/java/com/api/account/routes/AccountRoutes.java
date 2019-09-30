@@ -14,11 +14,12 @@ import static io.undertow.util.Headers.CONTENT_TYPE;
 
 public class AccountRoutes {
 
+    private static final AccountDao accountDao = new AccountDao();
+
     public static void findAll(HttpServerExchange exchange) {
         exchange.setStatusCode(HTTP_OK_STATUS);
         exchange.getResponseHeaders().put(CONTENT_TYPE, HEADER_JSON);
 
-        AccountDao accountDao = new AccountDao();
         List<Account> accounts = accountDao.findAll();
         exchange.getResponseSender().send(convertToJson(accounts));
     }
@@ -41,7 +42,6 @@ public class AccountRoutes {
         exchange.getRequestReceiver().receiveFullString((serverExchange, message) -> {
             Account account = readFromJson(message, new TypeReference<>(){});
             if(account != null) {
-                AccountDao accountDao = new AccountDao();
                 accountDao.save(account);
                 exchange.getResponseSender().send("Account saved successfully");
             }
