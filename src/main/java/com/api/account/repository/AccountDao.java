@@ -50,4 +50,35 @@ public class AccountDao {
             throw new RuntimeException(e);
         }
     }
+
+    public Account findById(Long id) {
+        String sql = "select * from accounts where id = ?";
+        try {
+            Account account = new Account();
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setLong(1, id);
+            preparedStatement.execute();
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                account.setId(resultSet.getLong("id"));
+                account.setName(resultSet.getString("name"));
+            }
+            resultSet.close();
+            preparedStatement.close();
+            return account;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void delete(Long id) {
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("delete from accounts where id = ?");
+            preparedStatement.setLong(1, id);
+            preparedStatement.execute();
+            preparedStatement.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

@@ -21,7 +21,7 @@ public class AccountApiApplication {
             .add(GET, "/accounts", AccountRoutes::findAll)
             .add(GET, "/accounts/{id}", AccountRoutes::findById)
             .add(POST, "/accounts", AccountRoutes::create)
-            .add(DELETE, "/accounts", AccountRoutes::delete);
+            .add(DELETE, "/accounts/{id}", AccountRoutes::delete);
 
     public static void main(String[] args) {
         Undertow.Builder builder = Undertow.builder();

@@ -29,10 +29,7 @@ public class AccountRoutes {
         exchange.getResponseHeaders().put(CONTENT_TYPE, HEADER_JSON);
         String id = exchange.getQueryParameters().get("id").getFirst();
 
-        Account account = new Account();
-        account.setId(Long.valueOf(id));
-        account.setName("Rafael");
-
+        Account account = accountDao.findById(Long.valueOf(id));
         exchange.getResponseSender().send(convertToJson(account));
     }
 
@@ -51,5 +48,11 @@ public class AccountRoutes {
     public static void delete(HttpServerExchange exchange) {
         exchange.setStatusCode(HTTP_NO_CONTENT_STATUS);
         exchange.getResponseHeaders().put(CONTENT_TYPE, HEADER_JSON);
+        String id = exchange.getQueryParameters().get("id").getFirst();
+
+        Account account = accountDao.findById(Long.valueOf(id));
+        if(account != null) {
+            accountDao.delete(account.getId());
+        }
     }
 }
