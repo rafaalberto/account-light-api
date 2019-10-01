@@ -1,7 +1,7 @@
 package com.api.account;
 
 import com.api.account.database.DatabaseConnection;
-import com.api.account.routes.AccountRoutes;
+import com.api.account.resource.AccountResource;
 import io.undertow.Undertow;
 import io.undertow.server.HttpServerExchange;
 import io.undertow.server.RoutingHandler;
@@ -18,11 +18,11 @@ public class AccountApiApplication {
 
     private static final RoutingHandler ROUTES = new RoutingHandler()
             .add(GET, "/", AccountApiApplication::handleRequest)
-            .add(GET, "/accounts", AccountRoutes::findAll)
-            .add(GET, "/accounts/{id}", AccountRoutes::findById)
-            .add(POST, "/accounts", AccountRoutes::create)
-            .add(PUT, "/accounts/{id}", AccountRoutes::update)
-            .add(DELETE, "/accounts/{id}", AccountRoutes::delete);
+            .add(GET, "/accounts", AccountResource::findAll)
+            .add(GET, "/accounts/{id}", AccountResource::findById)
+            .add(POST, "/accounts", AccountResource::create)
+            .add(PUT, "/accounts/{id}", AccountResource::update)
+            .add(DELETE, "/accounts/{id}", AccountResource::delete);
 
     public static void main(String[] args) {
         Undertow.Builder builder = Undertow.builder();
