@@ -117,7 +117,6 @@ public class AccountDaoImpl implements AccountDao {
     @Override
     public void updateBalanceByTransfer(Account accountSender, Account accountReceiver) {
         try {
-
             connection.setAutoCommit(false);
 
             String sql = "update accounts set balance = ? where id = ?";
@@ -129,14 +128,13 @@ public class AccountDaoImpl implements AccountDao {
             preparedStatementSender.close();
 
             PreparedStatement preparedStatementReceiver = connection.prepareStatement(sql);
-            preparedStatementReceiver.setBigDecimal(1, accountSender.getBalance());
-            preparedStatementReceiver.setLong(2, accountSender.getId());
+            preparedStatementReceiver.setBigDecimal(1, accountReceiver.getBalance());
+            preparedStatementReceiver.setLong(2, accountReceiver.getId());
             preparedStatementReceiver.execute();
             preparedStatementReceiver.close();
 
             connection.commit();
             connection.setAutoCommit(true);
-
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
