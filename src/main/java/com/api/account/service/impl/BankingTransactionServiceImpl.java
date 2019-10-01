@@ -10,6 +10,8 @@ import com.api.account.service.BankingTransactionService;
 
 import java.math.BigDecimal;
 
+import static com.api.account.constants.HttpConstants.*;
+
 public class BankingTransactionServiceImpl implements BankingTransactionService {
 
     private AccountService accountService;
@@ -25,7 +27,7 @@ public class BankingTransactionServiceImpl implements BankingTransactionService 
             account.deposit(bankingTransaction.getAmount());
             accountService.updateBalance(account);
         } else {
-            throw new BusinessException(HttpConstants.HTTP_BAD_REQUEST_STATUS, "Transaction not valid for this operation");
+            throw new BusinessException(HTTP_BAD_REQUEST_STATUS, "Transaction not valid for this operation");
         }
     }
 
@@ -34,12 +36,12 @@ public class BankingTransactionServiceImpl implements BankingTransactionService 
         Account account = accountService.findById(bankingTransaction.getAccountSenderId());
         if(bankingTransaction.getType().equals(BankingTransactionType.WITHDRAW)) {
             if(account.getBalance().compareTo(bankingTransaction.getAmount()) < BigDecimal.ZERO.intValue()) {
-                throw new BusinessException(HttpConstants.HTTP_BAD_REQUEST_STATUS, "Insufficient funds");
+                throw new BusinessException(HTTP_BAD_REQUEST_STATUS, "Insufficient funds");
             }
             account.withdraw(bankingTransaction.getAmount());
             accountService.updateBalance(account);
         } else {
-            throw new BusinessException(HttpConstants.HTTP_BAD_REQUEST_STATUS, "Transaction not valid for this operation");
+            throw new BusinessException(HTTP_BAD_REQUEST_STATUS, "Transaction not valid for this operation");
         }
     }
 
@@ -49,15 +51,20 @@ public class BankingTransactionServiceImpl implements BankingTransactionService 
         Account accountReceiver = accountService.findById(bankingTransaction.getAccountReceiverId());
         if(bankingTransaction.getType().equals(BankingTransactionType.TRANSFER)) {
             if(accountSender.getBalance().compareTo(bankingTransaction.getAmount()) < BigDecimal.ZERO.intValue()) {
-                throw new BusinessException(HttpConstants.HTTP_BAD_REQUEST_STATUS, "Insufficient funds");
+                throw new BusinessException(HTTP_BAD_REQUEST_STATUS, "Insufficient funds");
             }
             accountSender.withdraw(bankingTransaction.getAmount());
             accountService.updateBalance(accountSender);
 
             accountReceiver.deposit(bankingTransaction.getAmount());
+
+            if(accountReceiver.getId() == 2) {
+                throw new BusinessException(HTTP_BAD_REQUEST_STATUS, "Error receiver");
+            }
+
             accountService.updateBalance(accountReceiver);
         } else {
-            throw new BusinessException(HttpConstants.HTTP_BAD_REQUEST_STATUS, "Transaction not valid for this operation");
+            throw new BusinessException(HTTP_BAD_REQUEST_STATUS, "Transaction not valid for this operation");
         }
     }
 }
