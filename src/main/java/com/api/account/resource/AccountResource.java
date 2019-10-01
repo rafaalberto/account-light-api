@@ -37,9 +37,14 @@ public class AccountResource {
         exchange.getRequestReceiver().receiveFullString((serverExchange, message) -> {
             Account account = readFromJson(message, new TypeReference<>() {});
             if (account != null) {
-                account.setId(Long.valueOf(id));
-                accountService.save(account);
-                exchange.getResponseSender().send("Account updated successfully");
+                try {
+                    account.setId(Long.valueOf(id));
+                    accountService.save(account);
+                    exchange.getResponseSender().send("Account updated successfully");
+                } catch (BusinessException e) {
+                    exchange.setStatusCode(e.getHttpStatus());
+                    exchange.getResponseSender().send(e.getMessage());
+                }
             }
         });
     }
@@ -48,15 +53,25 @@ public class AccountResource {
         exchange.setStatusCode(HTTP_NO_CONTENT_STATUS);
         exchange.getResponseHeaders().put(CONTENT_TYPE, HEADER_JSON);
         String id = exchange.getQueryParameters().get("id").getFirst();
-        accountService.delete(Long.valueOf(id));
+        try {
+            accountService.delete(Long.valueOf(id));
+        } catch (BusinessException e) {
+            exchange.setStatusCode(e.getHttpStatus());
+            exchange.getResponseSender().send(e.getMessage());
+        }
     }
 
     public static void findAll(HttpServerExchange exchange) {
         exchange.setStatusCode(HTTP_OK_STATUS);
         exchange.getResponseHeaders().put(CONTENT_TYPE, HEADER_JSON);
 
-        List<Account> accounts = accountService.findAll();
-        exchange.getResponseSender().send(convertToJson(accounts));
+        try {
+            List<Account> accounts = accountService.findAll();
+            exchange.getResponseSender().send(convertToJson(accounts));
+        } catch(BusinessException e) {
+            exchange.setStatusCode(e.getHttpStatus());
+            exchange.getResponseSender().send(e.getMessage());
+        }
     }
 
     public static void findById(HttpServerExchange exchange) {

@@ -7,8 +7,10 @@ import com.api.account.repository.impl.AccountDaoImpl;
 import com.api.account.service.AccountService;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.api.account.constants.HttpConstants.HTTP_BAD_REQUEST_STATUS;
+import static java.util.Optional.*;
 
 public class AccountServiceImpl implements AccountService {
 
@@ -20,16 +22,17 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public List<Account> findAll() {
-        return accountDao.findAll();
+        List<Account> accounts = accountDao.findAll();
+        if(accounts.isEmpty()) {
+            throw new BusinessException(HTTP_BAD_REQUEST_STATUS, "No accounts found");
+        }
+        return accounts;
     }
 
     @Override
     public Account findById(Long id) {
-        Account account = accountDao.findById(id);
-        if(account == null || account.getId() == null) {
-            throw new BusinessException(HTTP_BAD_REQUEST_STATUS, "Account not found");
-        }
-        return account;
+        Optional<Account> account = ofNullable(accountDao.findById(id));
+        return account.orElseThrow(() -> new BusinessException(HTTP_BAD_REQUEST_STATUS, "Account not found"));
     }
 
     @Override
@@ -37,12 +40,24 @@ public class AccountServiceImpl implements AccountService {
         if(account.getId() == null) {
             accountDao.insert(account);
         }else {
+            verifyIfExists(account.getId());
             accountDao.update(account);
         }
     }
 
     @Override
     public void delete(Long id) {
-        accountDao.delete(id);
+        Account account = findById(id);
+        if(account != null) {
+            accountDao.delete(account.getId());
+        }
+    }
+
+    private void verifyIfExists(Long id) {
+        Optional<Account> account = ofNullable(accountDao.findById(id));
+        if (account.isPresent()) {
+            return;
+        }
+        throw new BusinessException(HTTP_BAD_REQUEST_STATUS, "Account not found");
     }
 }

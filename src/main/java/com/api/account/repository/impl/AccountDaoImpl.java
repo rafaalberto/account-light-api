@@ -78,12 +78,13 @@ public class AccountDaoImpl implements AccountDao {
     public Account findById(Long id) {
         String sql = "select * from accounts where id = ?";
         try {
-            Account account = new Account();
+            Account account = null;
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setLong(1, id);
             preparedStatement.execute();
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
+                account = new Account();
                 account.setId(resultSet.getLong("id"));
                 account.setName(resultSet.getString("name"));
             }
