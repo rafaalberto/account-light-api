@@ -25,7 +25,24 @@ public class BankingTransactionResource {
             if (bankingTransaction != null) {
                 try {
                     bankingTransactionService.deposit(bankingTransaction);
-                    exchange.getResponseSender().send("Transfer ok");
+                    exchange.getResponseSender().send("Deposit ok");
+                } catch(BusinessException e) {
+                    exchange.setStatusCode(e.getHttpStatus());
+                    exchange.getResponseSender().send(e.getMessage());
+                }
+            }
+        });
+    }
+
+    public static void withdraw(HttpServerExchange exchange) {
+        exchange.setStatusCode(HTTP_CREATED_STATUS);
+        exchange.getResponseHeaders().put(CONTENT_TYPE, HEADER_JSON);
+        exchange.getRequestReceiver().receiveFullString((serverExchange, message) -> {
+            BankingTransaction bankingTransaction = readFromJson(message, new TypeReference<>() {});
+            if (bankingTransaction != null) {
+                try {
+                    bankingTransactionService.withdraw(bankingTransaction);
+                    exchange.getResponseSender().send("Withdraw ok");
                 } catch(BusinessException e) {
                     exchange.setStatusCode(e.getHttpStatus());
                     exchange.getResponseSender().send(e.getMessage());
