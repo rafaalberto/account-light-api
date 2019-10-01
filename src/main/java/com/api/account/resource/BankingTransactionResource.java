@@ -1,7 +1,6 @@
 package com.api.account.resource;
 
 import com.api.account.exception.BusinessException;
-import com.api.account.model.Account;
 import com.api.account.model.BankingTransaction;
 import com.api.account.service.BankingTransactionService;
 import com.api.account.service.impl.BankingTransactionServiceImpl;
@@ -43,6 +42,23 @@ public class BankingTransactionResource {
                 try {
                     bankingTransactionService.withdraw(bankingTransaction);
                     exchange.getResponseSender().send("Withdraw ok");
+                } catch(BusinessException e) {
+                    exchange.setStatusCode(e.getHttpStatus());
+                    exchange.getResponseSender().send(e.getMessage());
+                }
+            }
+        });
+    }
+
+    public static void transfer(HttpServerExchange exchange) {
+        exchange.setStatusCode(HTTP_CREATED_STATUS);
+        exchange.getResponseHeaders().put(CONTENT_TYPE, HEADER_JSON);
+        exchange.getRequestReceiver().receiveFullString((serverExchange, message) -> {
+            BankingTransaction bankingTransaction = readFromJson(message, new TypeReference<>() {});
+            if (bankingTransaction != null) {
+                try {
+                    bankingTransactionService.transfer(bankingTransaction);
+                    exchange.getResponseSender().send("Transfer ok");
                 } catch(BusinessException e) {
                     exchange.setStatusCode(e.getHttpStatus());
                     exchange.getResponseSender().send(e.getMessage());

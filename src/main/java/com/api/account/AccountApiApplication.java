@@ -25,7 +25,8 @@ public class AccountApiApplication {
             .add(PUT, "/accounts/{id}", AccountResource::update)
             .add(DELETE, "/accounts/{id}", AccountResource::delete)
             .add(POST, "/transactions/deposit", BankingTransactionResource::deposit)
-            .add(POST, "/transactions/withdraw", BankingTransactionResource::withdraw);
+            .add(POST, "/transactions/withdraw", BankingTransactionResource::withdraw)
+            .add(POST, "/transactions/transfer", BankingTransactionResource::transfer);
 
     public static void main(String[] args) {
         Undertow.Builder builder = Undertow.builder();

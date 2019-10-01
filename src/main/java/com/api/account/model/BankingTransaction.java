@@ -6,24 +6,27 @@ import java.math.BigDecimal;
 
 public class BankingTransaction {
 
-    private Long accountId;
+    private Long accountSenderId;
+    private Long accountReceiverId;
     private BigDecimal amount;
     private BankingTransactionType type;
 
     public BankingTransaction() { }
 
-    public BankingTransaction(Long accountId, BigDecimal amount, BankingTransactionType type) {
-        this.accountId = accountId;
-        this.amount = amount;
-        this.type = type;
+    public Long getAccountSenderId() {
+        return accountSenderId;
     }
 
-    public Long getAccountId() {
-        return accountId;
+    public void setAccountSenderId(Long accountSenderId) {
+        this.accountSenderId = accountSenderId;
     }
 
-    public void setAccountId(Long accountId) {
-        this.accountId = accountId;
+    public Long getAccountReceiverId() {
+        return accountReceiverId;
+    }
+
+    public void setAccountReceiverId(Long accountReceiverId) {
+        this.accountReceiverId = accountReceiverId;
     }
 
     public BigDecimal getAmount() {
@@ -42,13 +45,5 @@ public class BankingTransaction {
         this.type = type;
     }
 
-    @Override
-    public String toString() {
-        return "BankingTransaction{" +
-                "accountId=" + accountId +
-                ", amount=" + amount +
-                ", type=" + type +
-                '}';
-    }
 }
 

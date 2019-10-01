@@ -7,4 +7,6 @@ public interface BankingTransactionService {
     void deposit(BankingTransaction bankingTransaction);
 
     void withdraw(BankingTransaction bankingTransaction);
+
+    void transfer(BankingTransaction bankingTransaction);
 }
