@@ -1,5 +1,6 @@
 package com.api.account.resource;
 
+import com.api.account.exception.BusinessException;
 import com.api.account.model.Account;
 import com.api.account.service.AccountService;
 import com.api.account.service.impl.AccountServiceImpl;
@@ -63,7 +64,13 @@ public class AccountResource {
         exchange.getResponseHeaders().put(CONTENT_TYPE, HEADER_JSON);
         String id = exchange.getQueryParameters().get("id").getFirst();
 
-        Account account = accountService.findById(Long.valueOf(id));
-        exchange.getResponseSender().send(convertToJson(account));
+        try {
+            Account account = accountService.findById(Long.valueOf(id));
+            exchange.getResponseSender().send(convertToJson(account));
+        } catch (BusinessException e) {
+            exchange.setStatusCode(e.getHttpStatus());
+            exchange.getResponseSender().send(e.getMessage());
+        }
+
     }
 }

@@ -1,11 +1,14 @@
 package com.api.account.service.impl;
 
+import com.api.account.exception.BusinessException;
 import com.api.account.model.Account;
 import com.api.account.repository.AccountDao;
 import com.api.account.repository.impl.AccountDaoImpl;
 import com.api.account.service.AccountService;
 
 import java.util.List;
+
+import static com.api.account.constants.HttpConstants.HTTP_BAD_REQUEST_STATUS;
 
 public class AccountServiceImpl implements AccountService {
 
@@ -22,7 +25,11 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Account findById(Long id) {
-        return accountDao.findById(id);
+        Account account = accountDao.findById(id);
+        if(account == null || account.getId() == null) {
+            throw new BusinessException(HTTP_BAD_REQUEST_STATUS, "Account not found");
+        }
+        return account;
     }
 
     @Override
