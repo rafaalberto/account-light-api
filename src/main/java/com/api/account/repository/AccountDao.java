@@ -2,6 +2,7 @@ package com.api.account.repository;
 
 import com.api.account.model.Account;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface AccountDao {
@@ -15,5 +16,7 @@ public interface AccountDao {
     List<Account> findAll();
 
     Account findById(Long id);
+
+    void updateBalance(Account account);
 
 }

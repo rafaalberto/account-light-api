@@ -2,6 +2,7 @@ package com.api.account;
 
 import com.api.account.database.DatabaseConnection;
 import com.api.account.resource.AccountResource;
+import com.api.account.resource.BankingTransactionResource;
 import io.undertow.Undertow;
 import io.undertow.server.HttpServerExchange;
 import io.undertow.server.RoutingHandler;
@@ -22,7 +23,8 @@ public class AccountApiApplication {
             .add(GET, "/accounts/{id}", AccountResource::findById)
             .add(POST, "/accounts", AccountResource::create)
             .add(PUT, "/accounts/{id}", AccountResource::update)
-            .add(DELETE, "/accounts/{id}", AccountResource::delete);
+            .add(DELETE, "/accounts/{id}", AccountResource::delete)
+            .add(POST, "/transactions/deposit", BankingTransactionResource::deposit);
 
     public static void main(String[] args) {
         Undertow.Builder builder = Undertow.builder();

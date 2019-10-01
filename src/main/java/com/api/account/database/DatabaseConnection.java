@@ -14,7 +14,7 @@ public class DatabaseConnection {
     private static final String DROP_TABLE_ACCOUNTS = "DROP TABLE ACCOUNTS IF EXISTS ";
 
     private static final String CREATE_TABLE_ACCOUNTS = "CREATE TABLE ACCOUNTS " +
-            "(id bigint auto_increment NOT NULL, name VARCHAR(255), PRIMARY KEY( id ))";
+            "(id bigint auto_increment NOT NULL, name VARCHAR(255) NOT NULL, balance DECIMAL(10,2) NOT NULL, PRIMARY KEY( id ))";
 
     public static void connect() {
         try {

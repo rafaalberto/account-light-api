@@ -6,6 +6,7 @@ import com.api.account.repository.AccountDao;
 import com.api.account.repository.impl.AccountDaoImpl;
 import com.api.account.service.AccountService;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -51,6 +52,11 @@ public class AccountServiceImpl implements AccountService {
         if(account != null) {
             accountDao.delete(account.getId());
         }
+    }
+
+    @Override
+    public void updateBalance(Account account) {
+        accountDao.updateBalance(account);
     }
 
     private void verifyIfExists(Long id) {

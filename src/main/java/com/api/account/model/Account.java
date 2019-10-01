@@ -1,9 +1,12 @@
 package com.api.account.model;
 
+import java.math.BigDecimal;
+
 public class Account {
 
     private Long id;
     private String name;
+    private BigDecimal balance = BigDecimal.ZERO;
 
     public Long getId() {
         return id;
@@ -19,5 +22,17 @@ public class Account {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public BigDecimal getBalance() {
+        return balance;
+    }
+
+    public void setBalance(BigDecimal balance) {
+        this.balance = balance;
+    }
+
+    public void deposit(BigDecimal amount) {
+        this.balance = balance.add(amount);
     }
 }
