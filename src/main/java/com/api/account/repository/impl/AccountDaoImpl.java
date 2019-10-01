@@ -114,4 +114,32 @@ public class AccountDaoImpl implements AccountDao {
         }
     }
 
+    @Override
+    public void updateBalanceByTransfer(Account accountSender, Account accountReceiver) {
+        try {
+
+            connection.setAutoCommit(false);
+
+            String sql = "update accounts set balance = ? where id = ?";
+
+            PreparedStatement preparedStatementSender = connection.prepareStatement(sql);
+            preparedStatementSender.setBigDecimal(1, accountSender.getBalance());
+            preparedStatementSender.setLong(2, accountSender.getId());
+            preparedStatementSender.execute();
+            preparedStatementSender.close();
+
+            PreparedStatement preparedStatementReceiver = connection.prepareStatement(sql);
+            preparedStatementReceiver.setBigDecimal(1, accountSender.getBalance());
+            preparedStatementReceiver.setLong(2, accountSender.getId());
+            preparedStatementReceiver.execute();
+            preparedStatementReceiver.close();
+
+            connection.commit();
+            connection.setAutoCommit(true);
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

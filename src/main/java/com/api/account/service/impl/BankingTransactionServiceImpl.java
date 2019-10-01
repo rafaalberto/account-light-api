@@ -54,15 +54,8 @@ public class BankingTransactionServiceImpl implements BankingTransactionService 
                 throw new BusinessException(HTTP_BAD_REQUEST_STATUS, "Insufficient funds");
             }
             accountSender.withdraw(bankingTransaction.getAmount());
-            accountService.updateBalance(accountSender);
-
             accountReceiver.deposit(bankingTransaction.getAmount());
-
-            if(accountReceiver.getId() == 2) {
-                throw new BusinessException(HTTP_BAD_REQUEST_STATUS, "Error receiver");
-            }
-
-            accountService.updateBalance(accountReceiver);
+            accountService.updateBalanceByTransaction(accountSender, accountReceiver);
         } else {
             throw new BusinessException(HTTP_BAD_REQUEST_STATUS, "Transaction not valid for this operation");
         }

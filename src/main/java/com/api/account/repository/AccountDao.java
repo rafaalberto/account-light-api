@@ -19,4 +19,6 @@ public interface AccountDao {
 
     void updateBalance(Account account);
 
+    void updateBalanceByTransfer(Account accountSender, Account accountReceiver);
+
 }

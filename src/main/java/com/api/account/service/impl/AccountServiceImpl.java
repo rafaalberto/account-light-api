@@ -59,6 +59,11 @@ public class AccountServiceImpl implements AccountService {
         accountDao.updateBalance(account);
     }
 
+    @Override
+    public void updateBalanceByTransaction(Account accountSender, Account accountReceiver) {
+        accountDao.updateBalanceByTransfer(accountSender, accountReceiver);
+    }
+
     private void verifyIfExists(Long id) {
         Optional<Account> account = ofNullable(accountDao.findById(id));
         if (account.isPresent()) {
