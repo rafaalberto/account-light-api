@@ -1,4 +1,4 @@
-package com.api.account.model;
+package com.api.account.repository.impl.model;
 
 import java.math.BigDecimal;
 

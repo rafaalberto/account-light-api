@@ -1,14 +1,11 @@
-package com.api.account.repository.impl;
+package com.api.account.repository.impl.repository.impl;
 
-import com.api.account.database.ConnectionFactory;
-import com.api.account.model.Account;
-import com.api.account.repository.AccountDao;
+import com.api.account.repository.impl.database.ConnectionFactory;
+import com.api.account.repository.impl.model.Account;
+import com.api.account.repository.impl.repository.AccountDao;
 
-import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.math.BigInteger;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,27 +17,39 @@ public class AccountDaoImpl implements AccountDao {
         this.connection = ConnectionFactory.getConnection();
     }
 
-    public void insert(Account account) {
+    public Account insert(Account account) {
         String sql = "insert into accounts (name, balance) values (?, ?)";
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1, account.getName());
-            preparedStatement.setBigDecimal(2, BigDecimal.ZERO);
-            preparedStatement.execute();
+            preparedStatement.setBigDecimal(2, account.getBalance());
+
+            var rowsAffected = preparedStatement.executeUpdate();
+
+            account.setId(fetchGeneratedKey(preparedStatement, rowsAffected));
+
             preparedStatement.close();
+
+            return account;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void update(Account account) {
+    public Account update(Account account) {
         String sql = "update accounts set name = ? where id = ?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, account.getName());
             preparedStatement.setLong(2, account.getId());
-            preparedStatement.execute();
+
+            var rowsAffected = preparedStatement.executeUpdate();
+
+            account.setId(fetchGeneratedKey(preparedStatement, rowsAffected));
+
             preparedStatement.close();
+
+            return account;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -148,6 +157,19 @@ public class AccountDaoImpl implements AccountDao {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private Long fetchGeneratedKey(PreparedStatement preparedStatement, int rowsAffected) throws SQLException {
+        if(rowsAffected > BigInteger.ZERO.intValue()){
+            try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    return generatedKeys.getLong(1);
+                } else {
+                    throw new SQLException("Operation failed no ID obtained");
+                }
+            }
+        }
+        return null;
     }
 
 }

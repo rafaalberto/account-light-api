@@ -1,4 +1,4 @@
-package com.api.account.constants;
+package com.api.account.repository.impl.constants;
 
 public class HttpConstants {
 

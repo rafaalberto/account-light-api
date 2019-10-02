@@ -1,4 +1,4 @@
-package com.api.account.exception;
+package com.api.account.repository.impl.exception;
 
 public class BusinessException extends RuntimeException {
 

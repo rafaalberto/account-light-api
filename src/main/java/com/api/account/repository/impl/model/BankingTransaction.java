@@ -1,6 +1,6 @@
-package com.api.account.model;
+package com.api.account.repository.impl.model;
 
-import com.api.account.enumeration.BankingTransactionType;
+import com.api.account.repository.impl.enumeration.BankingTransactionType;
 
 import java.math.BigDecimal;
 

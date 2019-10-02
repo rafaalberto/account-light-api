@@ -1,15 +1,14 @@
-package com.api.account.resource;
+package com.api.account.repository.impl.resource;
 
-import com.api.account.exception.BusinessException;
-import com.api.account.model.BankingTransaction;
-import com.api.account.service.BankingTransactionService;
-import com.api.account.service.impl.BankingTransactionServiceImpl;
+import com.api.account.repository.impl.exception.BusinessException;
+import com.api.account.repository.impl.constants.HttpConstants;
+import com.api.account.repository.impl.model.BankingTransaction;
+import com.api.account.repository.impl.service.BankingTransactionService;
+import com.api.account.repository.impl.service.impl.BankingTransactionServiceImpl;
+import com.api.account.repository.impl.utils.UtilsApplication;
 import com.fasterxml.jackson.core.type.TypeReference;
 import io.undertow.server.HttpServerExchange;
 
-import static com.api.account.constants.HttpConstants.HEADER_JSON;
-import static com.api.account.constants.HttpConstants.HTTP_CREATED_STATUS;
-import static com.api.account.utils.UtilsApplication.readFromJson;
 import static io.undertow.util.Headers.CONTENT_TYPE;
 
 public class BankingTransactionResource {
@@ -17,10 +16,10 @@ public class BankingTransactionResource {
     private static final BankingTransactionService bankingTransactionService = new BankingTransactionServiceImpl();
 
     public static void deposit(HttpServerExchange exchange) {
-        exchange.setStatusCode(HTTP_CREATED_STATUS);
-        exchange.getResponseHeaders().put(CONTENT_TYPE, HEADER_JSON);
+        exchange.setStatusCode(HttpConstants.HTTP_CREATED_STATUS);
+        exchange.getResponseHeaders().put(CONTENT_TYPE, HttpConstants.HEADER_JSON);
         exchange.getRequestReceiver().receiveFullString((serverExchange, message) -> {
-            BankingTransaction bankingTransaction = readFromJson(message, new TypeReference<>() {});
+            BankingTransaction bankingTransaction = UtilsApplication.readFromJson(message, new TypeReference<>() {});
             if (bankingTransaction != null) {
                 try {
                     bankingTransactionService.deposit(bankingTransaction);
@@ -34,10 +33,10 @@ public class BankingTransactionResource {
     }
 
     public static void withdraw(HttpServerExchange exchange) {
-        exchange.setStatusCode(HTTP_CREATED_STATUS);
-        exchange.getResponseHeaders().put(CONTENT_TYPE, HEADER_JSON);
+        exchange.setStatusCode(HttpConstants.HTTP_CREATED_STATUS);
+        exchange.getResponseHeaders().put(CONTENT_TYPE, HttpConstants.HEADER_JSON);
         exchange.getRequestReceiver().receiveFullString((serverExchange, message) -> {
-            BankingTransaction bankingTransaction = readFromJson(message, new TypeReference<>() {});
+            BankingTransaction bankingTransaction = UtilsApplication.readFromJson(message, new TypeReference<>() {});
             if (bankingTransaction != null) {
                 try {
                     bankingTransactionService.withdraw(bankingTransaction);
@@ -51,10 +50,10 @@ public class BankingTransactionResource {
     }
 
     public static void transfer(HttpServerExchange exchange) {
-        exchange.setStatusCode(HTTP_CREATED_STATUS);
-        exchange.getResponseHeaders().put(CONTENT_TYPE, HEADER_JSON);
+        exchange.setStatusCode(HttpConstants.HTTP_CREATED_STATUS);
+        exchange.getResponseHeaders().put(CONTENT_TYPE, HttpConstants.HEADER_JSON);
         exchange.getRequestReceiver().receiveFullString((serverExchange, message) -> {
-            BankingTransaction bankingTransaction = readFromJson(message, new TypeReference<>() {});
+            BankingTransaction bankingTransaction = UtilsApplication.readFromJson(message, new TypeReference<>() {});
             if (bankingTransaction != null) {
                 try {
                     bankingTransactionService.transfer(bankingTransaction);

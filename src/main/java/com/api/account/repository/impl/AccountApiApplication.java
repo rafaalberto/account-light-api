@@ -1,16 +1,16 @@
-package com.api.account;
+package com.api.account.repository.impl;
 
-import com.api.account.database.DatabaseConnection;
-import com.api.account.resource.AccountResource;
-import com.api.account.resource.BankingTransactionResource;
+import com.api.account.repository.impl.database.DatabaseConnection;
+import com.api.account.repository.impl.resource.AccountResource;
+import com.api.account.repository.impl.resource.BankingTransactionResource;
 import io.undertow.Undertow;
 import io.undertow.server.HttpServerExchange;
 import io.undertow.server.RoutingHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static com.api.account.constants.HttpConstants.APP_HOST;
-import static com.api.account.constants.HttpConstants.APP_PORT;
+import static com.api.account.repository.impl.constants.HttpConstants.APP_HOST;
+import static com.api.account.repository.impl.constants.HttpConstants.APP_PORT;
 import static io.undertow.util.Methods.*;
 
 public class AccountApiApplication {

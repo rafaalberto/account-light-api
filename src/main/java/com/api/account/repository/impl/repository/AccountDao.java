@@ -1,14 +1,14 @@
-package com.api.account.repository;
+package com.api.account.repository.impl.repository;
 
-import com.api.account.model.Account;
+import com.api.account.repository.impl.model.Account;
 
 import java.util.List;
 
 public interface AccountDao {
 
-    void insert(Account account);
+    Account insert(Account account);
 
-    void update(Account account);
+    Account update(Account account);
 
     void delete(Long id);
 

@@ -1,4 +1,4 @@
-package com.api.account.utils;
+package com.api.account.repository.impl.utils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
