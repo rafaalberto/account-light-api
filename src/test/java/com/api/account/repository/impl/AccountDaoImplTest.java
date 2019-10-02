@@ -7,10 +7,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.math.BigDecimal;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class AccountDaoImplTest {
 
@@ -22,7 +19,6 @@ public class AccountDaoImplTest {
     public void setUp() {
         account = new Account();
         account.setName("Rafael");
-        account.setBalance(new BigDecimal(2000.00));
     }
 
     @Test
@@ -30,8 +26,19 @@ public class AccountDaoImplTest {
         Account accountInserted = accountDao.insert(account);
         accountInserted = accountDao.findById(accountInserted.getId());
 
-        assertNotNull(accountInserted.getId());
-        assertEquals("Rafael", accountInserted.getName());
+        assertThat(accountInserted.getId()).isNotNull();
+        assertThat(accountInserted.getName()).isEqualTo("Rafael");
+    }
+
+    @Test
+    public void update() {
+        account.setName("Maria");
+        Account accountSaved = accountDao.insert(account);
+        assertThat(accountSaved.getName()).isEqualTo("Maria");
+
+        accountSaved.setName("Rafael");
+        accountSaved = accountDao.update(accountSaved);
+        assertThat(accountSaved.getName()).isEqualTo("Rafael");
     }
 
     @After
