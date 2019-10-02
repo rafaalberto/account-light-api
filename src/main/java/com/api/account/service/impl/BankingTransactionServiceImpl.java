@@ -1,15 +1,15 @@
-package com.api.account.repository.impl.service.impl;
+package com.api.account.service.impl;
 
-import com.api.account.repository.impl.enumeration.BankingTransactionType;
-import com.api.account.repository.impl.exception.BusinessException;
-import com.api.account.repository.impl.model.Account;
-import com.api.account.repository.impl.service.AccountService;
-import com.api.account.repository.impl.service.BankingTransactionService;
-import com.api.account.repository.impl.model.BankingTransaction;
+import com.api.account.enumeration.BankingTransactionType;
+import com.api.account.exception.BusinessException;
+import com.api.account.model.Account;
+import com.api.account.service.AccountService;
+import com.api.account.service.BankingTransactionService;
+import com.api.account.model.BankingTransaction;
 
 import java.math.BigDecimal;
 
-import static com.api.account.repository.impl.constants.HttpConstants.*;
+import static com.api.account.constants.HttpConstants.*;
 
 public class BankingTransactionServiceImpl implements BankingTransactionService {
 

@@ -1,7 +1,7 @@
-package com.api.account.repository.impl.config;
+package com.api.account.config;
 
-import com.api.account.repository.impl.resource.AccountResource;
-import com.api.account.repository.impl.resource.BankingTransactionResource;
+import com.api.account.resource.AccountResource;
+import com.api.account.resource.BankingTransactionResource;
 import io.undertow.server.HttpServerExchange;
 import io.undertow.server.RoutingHandler;
 

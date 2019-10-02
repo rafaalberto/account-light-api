@@ -1,13 +1,13 @@
-package com.api.account.repository.impl;
+package com.api.account;
 
-import com.api.account.repository.impl.config.RoutesApplication;
-import com.api.account.repository.impl.database.DatabaseConnection;
+import com.api.account.config.RoutesApplication;
+import com.api.account.database.DatabaseConnection;
 import io.undertow.Undertow;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static com.api.account.repository.impl.constants.HttpConstants.APP_HOST;
-import static com.api.account.repository.impl.constants.HttpConstants.APP_PORT;
+import static com.api.account.constants.HttpConstants.APP_HOST;
+import static com.api.account.constants.HttpConstants.APP_PORT;
 
 public class AccountApiApplication {
 

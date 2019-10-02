@@ -1,4 +1,4 @@
-package com.api.account.repository.impl.enumeration;
+package com.api.account.enumeration;
 
 public enum BankingTransactionType {
 

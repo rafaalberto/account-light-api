@@ -1,15 +1,15 @@
-package com.api.account.repository.impl.service.impl;
+package com.api.account.service.impl;
 
-import com.api.account.repository.impl.exception.BusinessException;
-import com.api.account.repository.impl.repository.impl.AccountDaoImpl;
-import com.api.account.repository.impl.service.AccountService;
-import com.api.account.repository.impl.model.Account;
-import com.api.account.repository.impl.repository.AccountDao;
+import com.api.account.exception.BusinessException;
+import com.api.account.AccountDaoImpl;
+import com.api.account.service.AccountService;
+import com.api.account.model.Account;
+import com.api.account.repository.AccountDao;
 
 import java.util.List;
 import java.util.Optional;
 
-import static com.api.account.repository.impl.constants.HttpConstants.HTTP_BAD_REQUEST_STATUS;
+import static com.api.account.constants.HttpConstants.HTTP_BAD_REQUEST_STATUS;
 import static java.util.Optional.*;
 
 public class AccountServiceImpl implements AccountService {

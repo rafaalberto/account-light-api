@@ -1,4 +1,4 @@
-package com.api.account.repository.impl.database;
+package com.api.account.database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

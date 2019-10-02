@@ -1,4 +1,4 @@
-package com.api.account.repository.impl.database;
+package com.api.account.database;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

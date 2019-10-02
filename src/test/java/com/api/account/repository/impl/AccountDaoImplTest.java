@@ -1,8 +1,8 @@
 package com.api.account.repository.impl;
 
-import com.api.account.repository.impl.model.Account;
-import com.api.account.repository.impl.repository.AccountDao;
-import com.api.account.repository.impl.repository.impl.AccountDaoImpl;
+import com.api.account.AccountDaoImpl;
+import com.api.account.model.Account;
+import com.api.account.repository.AccountDao;
 import org.junit.After;
 import org.junit.Test;
 

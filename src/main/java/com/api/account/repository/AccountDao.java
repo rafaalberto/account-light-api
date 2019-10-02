@@ -1,6 +1,6 @@
-package com.api.account.repository.impl.repository;
+package com.api.account.repository;
 
-import com.api.account.repository.impl.model.Account;
+import com.api.account.model.Account;
 
 import java.util.List;
 

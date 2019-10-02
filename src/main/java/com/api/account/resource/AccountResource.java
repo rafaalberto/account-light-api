@@ -1,16 +1,16 @@
-package com.api.account.repository.impl.resource;
+package com.api.account.resource;
 
-import com.api.account.repository.impl.exception.BusinessException;
-import com.api.account.repository.impl.model.Account;
-import com.api.account.repository.impl.service.AccountService;
-import com.api.account.repository.impl.service.impl.AccountServiceImpl;
-import com.api.account.repository.impl.utils.UtilsApplication;
+import com.api.account.exception.BusinessException;
+import com.api.account.model.Account;
+import com.api.account.service.AccountService;
+import com.api.account.service.impl.AccountServiceImpl;
+import com.api.account.utils.UtilsApplication;
 import com.fasterxml.jackson.core.type.TypeReference;
 import io.undertow.server.HttpServerExchange;
 
 import java.util.List;
 
-import static com.api.account.repository.impl.constants.HttpConstants.*;
+import static com.api.account.constants.HttpConstants.*;
 import static io.undertow.util.Headers.CONTENT_TYPE;
 
 public class AccountResource {

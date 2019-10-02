@@ -1,11 +1,11 @@
-package com.api.account.repository.impl.resource;
+package com.api.account.resource;
 
-import com.api.account.repository.impl.exception.BusinessException;
-import com.api.account.repository.impl.constants.HttpConstants;
-import com.api.account.repository.impl.model.BankingTransaction;
-import com.api.account.repository.impl.service.BankingTransactionService;
-import com.api.account.repository.impl.service.impl.BankingTransactionServiceImpl;
-import com.api.account.repository.impl.utils.UtilsApplication;
+import com.api.account.constants.HttpConstants;
+import com.api.account.exception.BusinessException;
+import com.api.account.model.BankingTransaction;
+import com.api.account.service.BankingTransactionService;
+import com.api.account.service.impl.BankingTransactionServiceImpl;
+import com.api.account.utils.UtilsApplication;
 import com.fasterxml.jackson.core.type.TypeReference;
 import io.undertow.server.HttpServerExchange;
 

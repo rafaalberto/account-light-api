@@ -1,6 +1,6 @@
-package com.api.account.repository.impl.service;
+package com.api.account.service;
 
-import com.api.account.repository.impl.model.BankingTransaction;
+import com.api.account.model.BankingTransaction;
 
 public interface BankingTransactionService {
 

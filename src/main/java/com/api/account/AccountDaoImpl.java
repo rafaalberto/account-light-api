@@ -1,8 +1,8 @@
-package com.api.account.repository.impl.repository.impl;
+package com.api.account;
 
-import com.api.account.repository.impl.database.ConnectionFactory;
-import com.api.account.repository.impl.model.Account;
-import com.api.account.repository.impl.repository.AccountDao;
+import com.api.account.database.ConnectionFactory;
+import com.api.account.model.Account;
+import com.api.account.repository.AccountDao;
 
 import java.math.BigInteger;
 import java.sql.*;
