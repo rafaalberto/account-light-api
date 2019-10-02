@@ -8,6 +8,18 @@ public class Account {
     private String name;
     private BigDecimal balance = BigDecimal.ZERO;
 
+    public Account() {
+    }
+
+    public Account(String name) {
+        this.name = name;
+    }
+
+    public Account(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     public Long getId() {
         return id;
     }

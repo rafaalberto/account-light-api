@@ -42,6 +42,7 @@ public class AccountDaoImpl implements AccountDao {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, account.getName());
             preparedStatement.setLong(2, account.getId());
+            preparedStatement.execute();
             preparedStatement.close();
             return account;
         } catch (SQLException e) {
