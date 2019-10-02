@@ -39,6 +39,8 @@ public class AccountDaoImplTest {
         assertThat(accountDeleted).isNull();
     }
 
+    /* Unit Test to findById does not implement because this one is has used in the previous tests */
+
     @Test
     public void findAll() {
         accountDao.insert(new Account("Rafael"));
