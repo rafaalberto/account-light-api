@@ -57,6 +57,16 @@ public class AccountDaoImpl implements AccountDao {
         }
     }
 
+    public void deleteAll() {
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("delete from accounts");
+            preparedStatement.execute();
+            preparedStatement.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public List<Account> findAll() {
         String sql = "select * from accounts";
         try {
