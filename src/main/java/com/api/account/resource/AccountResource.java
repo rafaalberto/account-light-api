@@ -83,7 +83,7 @@ public class AccountResource {
             exchange.getResponseSender().send(UtilsApplication.convertToJson(account));
         } catch (BusinessException e) {
             exchange.setStatusCode(e.getHttpStatus());
-            exchange.getResponseSender().send(e.getMessage());
+            exchange.getResponseSender().send("{ \"message\": \"Code\" }");
         }
 
     }

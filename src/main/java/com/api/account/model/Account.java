@@ -51,4 +51,13 @@ public class Account {
     public void withdraw(BigDecimal amount) {
         this.balance = balance.subtract(amount);
     }
+
+    @Override
+    public String toString() {
+        return "Account{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", balance=" + balance +
+                '}';
+    }
 }
