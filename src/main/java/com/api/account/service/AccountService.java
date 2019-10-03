@@ -8,7 +8,7 @@ public interface AccountService {
 
     List<Account> findAll();
     Account findById(Long id);
-    void save(Account account);
+    Account save(Account account);
     void delete(Long id);
     void updateBalance(Account account);
     void updateBalanceByTransaction(Account accountSender, Account accountReceiver);

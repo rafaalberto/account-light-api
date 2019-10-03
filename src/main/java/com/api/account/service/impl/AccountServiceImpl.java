@@ -1,16 +1,16 @@
 package com.api.account.service.impl;
 
-import com.api.account.exception.BusinessException;
 import com.api.account.AccountDaoImpl;
-import com.api.account.service.AccountService;
+import com.api.account.exception.BusinessException;
 import com.api.account.model.Account;
 import com.api.account.repository.AccountDao;
+import com.api.account.service.AccountService;
 
 import java.util.List;
 import java.util.Optional;
 
 import static com.api.account.constants.HttpConstants.HTTP_BAD_REQUEST_STATUS;
-import static java.util.Optional.*;
+import static java.util.Optional.ofNullable;
 
 public class AccountServiceImpl implements AccountService {
 
@@ -18,6 +18,10 @@ public class AccountServiceImpl implements AccountService {
 
     public AccountServiceImpl() {
         accountDao = new AccountDaoImpl();
+    }
+
+    public AccountServiceImpl(AccountDao accountDao) {
+        this.accountDao = accountDao;
     }
 
     @Override
@@ -36,12 +40,12 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void save(Account account) {
+    public Account save(Account account) {
         if(account.getId() == null) {
-            accountDao.insert(account);
+            return accountDao.insert(account);
         }else {
             verifyIfExists(account.getId());
-            accountDao.update(account);
+            return accountDao.update(account);
         }
     }
 
