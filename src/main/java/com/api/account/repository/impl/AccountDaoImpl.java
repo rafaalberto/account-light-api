@@ -1,4 +1,4 @@
-package com.api.account;
+package com.api.account.repository.impl;
 
 import com.api.account.database.ConnectionFactory;
 import com.api.account.model.Account;

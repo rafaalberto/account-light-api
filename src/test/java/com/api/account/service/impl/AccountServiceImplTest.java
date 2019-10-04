@@ -1,6 +1,6 @@
 package com.api.account.service.impl;
 
-import com.api.account.AccountDaoImpl;
+import com.api.account.repository.impl.AccountDaoImpl;
 import com.api.account.model.Account;
 import com.api.account.repository.AccountDao;
 import com.api.account.service.AccountService;
@@ -44,5 +44,7 @@ public class AccountServiceImplTest {
         Account accountSaved = accountService.save(accountToUpdate);
         assertThat(accountSaved.getName()).isEqualTo("Maria");
     }
+
+
 
 }

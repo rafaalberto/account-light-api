@@ -6,8 +6,8 @@ import io.undertow.Undertow;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static com.api.account.constants.HttpConstants.APP_HOST;
-import static com.api.account.constants.HttpConstants.APP_PORT;
+import static com.api.account.utils.HttpUtils.APP_HOST;
+import static com.api.account.utils.HttpUtils.APP_PORT;
 
 public class AccountApiApplication {
 

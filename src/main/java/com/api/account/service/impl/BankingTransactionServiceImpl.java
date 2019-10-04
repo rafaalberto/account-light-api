@@ -9,7 +9,7 @@ import com.api.account.model.BankingTransaction;
 
 import java.math.BigDecimal;
 
-import static com.api.account.constants.HttpConstants.*;
+import static com.api.account.utils.HttpUtils.*;
 
 public class BankingTransactionServiceImpl implements BankingTransactionService {
 

@@ -1,6 +1,5 @@
 package com.api.account.repository.impl;
 
-import com.api.account.AccountDaoImpl;
 import com.api.account.model.Account;
 import com.api.account.repository.AccountDao;
 import org.junit.After;
