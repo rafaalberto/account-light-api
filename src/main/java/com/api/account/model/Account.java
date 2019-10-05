@@ -37,7 +37,7 @@ public class Account {
     }
 
     public BigDecimal getBalance() {
-        return balance;
+        return balance.setScale(2);
     }
 
     public void setBalance(BigDecimal balance) {
@@ -52,12 +52,4 @@ public class Account {
         this.balance = balance.subtract(amount);
     }
 
-    @Override
-    public String toString() {
-        return "Account{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", balance=" + balance +
-                '}';
-    }
 }

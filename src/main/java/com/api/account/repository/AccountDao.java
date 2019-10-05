@@ -18,7 +18,7 @@ public interface AccountDao {
 
     Account findById(Long id);
 
-    void updateBalance(Account account);
+    Account updateBalance(Account account);
 
     void updateBalanceByTransfer(Account accountSender, Account accountReceiver);
 

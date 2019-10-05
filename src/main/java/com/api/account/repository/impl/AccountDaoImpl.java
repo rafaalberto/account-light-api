@@ -26,7 +26,7 @@ public class AccountDaoImpl implements AccountDao {
 
             var rowsAffected = preparedStatement.executeUpdate();
 
-            account.setId(fetchGeneratedKey(preparedStatement, rowsAffected));
+            account.setId(getGeneratedId(preparedStatement, rowsAffected));
 
             preparedStatement.close();
 
@@ -61,6 +61,7 @@ public class AccountDaoImpl implements AccountDao {
         }
     }
 
+    /* Created in order to use in unit test */
     public void deleteAll() {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement("delete from accounts");
@@ -114,8 +115,9 @@ public class AccountDaoImpl implements AccountDao {
         }
     }
 
+    /* used in deposit and withdraw transactions */
     @Override
-    public void updateBalance(Account account) {
+    public Account updateBalance(Account account) {
         String sql = "update accounts set balance = ? where id = ?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -123,11 +125,13 @@ public class AccountDaoImpl implements AccountDao {
             preparedStatement.setLong(2, account.getId());
             preparedStatement.execute();
             preparedStatement.close();
+            return account;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
+    /* used in transfer operations in order to treat database transactions */
     @Override
     public void updateBalanceByTransfer(Account accountSender, Account accountReceiver) {
         try {
@@ -154,7 +158,7 @@ public class AccountDaoImpl implements AccountDao {
         }
     }
 
-    private Long fetchGeneratedKey(PreparedStatement preparedStatement, int rowsAffected) throws SQLException {
+    private Long getGeneratedId(PreparedStatement preparedStatement, int rowsAffected) throws SQLException {
         if(rowsAffected > BigInteger.ZERO.intValue()){
             try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
