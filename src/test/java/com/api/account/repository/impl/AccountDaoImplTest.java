@@ -6,15 +6,18 @@ import org.junit.After;
 import org.junit.Test;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.List;
 
+import static com.api.account.utils.NumericConverter.convertTwoDecimalPlace;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class AccountDaoImplTest {
 
-    private AccountDao accountDao = new AccountDaoImpl();
+    private AccountDao accountDao;
+
+    public AccountDaoImplTest () {
+        accountDao = new AccountDaoImpl();
+    }
 
     @Test
     public void insert() {
@@ -41,7 +44,7 @@ public class AccountDaoImplTest {
         assertThat(accountDeleted).isNull();
     }
 
-    /* Unit Test to findById does not implement because this one is has used in the previous tests */
+    /* Unit Test to findById doesn't need to implement because this one is has used in the previous tests */
 
     @Test
     public void findAll() {
@@ -60,36 +63,36 @@ public class AccountDaoImplTest {
         Account accountBalanceUpdated = accountDao.updateBalance(accountInserted);
 
         assertThat(accountBalanceUpdated.getName()).isEqualTo("Maria");
-        assertThat(accountBalanceUpdated.getBalance()).isEqualTo(new BigDecimal(2000));
+        assertThat(accountBalanceUpdated.getBalance()).isEqualTo(convertTwoDecimalPlace(new BigDecimal(2000)));
     }
 
     @Test
     public void updateBalanceByTransfer() {
-        Account accountSender = accountDao.insert(new Account("Rafael"));
-        accountSender.deposit(new BigDecimal(1000));
+        Account accountSender = accountDeposit("Rafael", new BigDecimal(1000));
+        Account accountReceiver = accountDeposit("Maria", new BigDecimal(500));
+        accountTransfer(accountSender, accountReceiver, new BigDecimal(200));
+        verifyAccountsBalanceAfterTransfer(accountSender, accountReceiver);
+    }
+
+    private Account accountDeposit(String rafael, BigDecimal amount) {
+        Account accountSender = accountDao.insert(new Account(rafael));
+        accountSender.deposit(amount);
         accountSender = accountDao.update(accountSender);
+        return accountSender;
+    }
 
-        assertThat(accountSender.getBalance()).isEqualTo(new BigDecimal(1000).setScale(2));
-
-        Account accountReceiver = accountDao.insert(new Account("Maria"));
-        accountReceiver.deposit(new BigDecimal(500).setScale(2));
-        accountReceiver = accountDao.update(accountReceiver);
-
-        assertThat(accountReceiver.getBalance()).isEqualTo(new BigDecimal(500).setScale(2));
-
-        //transfer
-
-        accountSender.withdraw(new BigDecimal(100));
-        accountReceiver.deposit(new BigDecimal(100));
-
+    private void accountTransfer(Account accountSender, Account accountReceiver, BigDecimal amount) {
+        accountSender.withdraw(amount);
+        accountReceiver.deposit(amount);
         accountDao.updateBalanceByTransfer(accountSender, accountReceiver);
+    }
 
+    private void verifyAccountsBalanceAfterTransfer(Account accountSender, Account accountReceiver) {
         accountSender = accountDao.findById(accountSender.getId());
         accountReceiver = accountDao.findById(accountReceiver.getId());
 
-        assertThat(accountSender.getBalance()).isEqualTo(new BigDecimal(900).setScale(2));
-        assertThat(accountReceiver.getBalance()).isEqualTo(new BigDecimal(600).setScale(2));
-
+        assertThat(accountSender.getBalance()).isEqualTo(convertTwoDecimalPlace(new BigDecimal(800)));
+        assertThat(accountReceiver.getBalance()).isEqualTo(convertTwoDecimalPlace(new BigDecimal(700)));
     }
 
     @After

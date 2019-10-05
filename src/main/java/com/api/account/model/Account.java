@@ -2,6 +2,8 @@ package com.api.account.model;
 
 import java.math.BigDecimal;
 
+import static com.api.account.utils.NumericConverter.convertTwoDecimalPlace;
+
 public class Account {
 
     private Long id;
@@ -37,7 +39,7 @@ public class Account {
     }
 
     public BigDecimal getBalance() {
-        return balance.setScale(2);
+        return convertTwoDecimalPlace(balance);
     }
 
     public void setBalance(BigDecimal balance) {
