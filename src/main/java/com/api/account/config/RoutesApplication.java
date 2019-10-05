@@ -1,7 +1,7 @@
 package com.api.account.config;
 
 import com.api.account.resource.AccountResource;
-import com.api.account.resource.BankingTransactionResource;
+import com.api.account.resource.TransactionResource;
 import io.undertow.server.HttpServerExchange;
 import io.undertow.server.RoutingHandler;
 
@@ -16,9 +16,7 @@ public abstract class RoutesApplication {
             .add(POST, "/accounts", AccountResource::create)
             .add(PUT, "/accounts/{id}", AccountResource::update)
             .add(DELETE, "/accounts/{id}", AccountResource::delete)
-            .add(POST, "/transactions/deposit", BankingTransactionResource::deposit)
-            .add(POST, "/transactions/withdraw", BankingTransactionResource::withdraw)
-            .add(POST, "/transactions/transfer", BankingTransactionResource::transfer);
+            .add(POST, "/transactions", TransactionResource::execute);
 
     private static void handleRequest(HttpServerExchange exchange) {
         exchange.getResponseSender().send("Application Started");

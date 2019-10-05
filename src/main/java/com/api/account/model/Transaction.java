@@ -1,17 +1,17 @@
 package com.api.account.model;
 
-import com.api.account.enumeration.BankingTransactionType;
+import com.api.account.enumeration.TransactionType;
 
 import java.math.BigDecimal;
 
-public class BankingTransaction {
+public class Transaction {
 
     private Long accountSenderId;
     private Long accountReceiverId;
     private BigDecimal amount;
-    private BankingTransactionType type;
+    private TransactionType type;
 
-    public BankingTransaction() { }
+    public Transaction() { }
 
     public Long getAccountSenderId() {
         return accountSenderId;
@@ -37,11 +37,11 @@ public class BankingTransaction {
         this.amount = amount;
     }
 
-    public BankingTransactionType getType() {
+    public TransactionType getType() {
         return type;
     }
 
-    public void setType(BankingTransactionType type) {
+    public void setType(TransactionType type) {
         this.type = type;
     }
 
