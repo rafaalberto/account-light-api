@@ -25,9 +25,10 @@ public class DepositServiceImpl implements TransactionService {
 
         verifyData(transaction);
 
-        account.setBalance(deposit(account.getBalance(), transaction.getAmount()));
-
-        accountService.updateBalance(account);
+        synchronized (this) {
+            account.setBalance(deposit(account.getBalance(), transaction.getAmount()));
+            accountService.updateBalance(account);
+        }
     }
 
     private void verifyData(Transaction transaction) {

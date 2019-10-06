@@ -25,9 +25,10 @@ public class WithdrawServiceImpl implements TransactionService {
 
         verifyData(transaction);
 
-        account.setBalance(withdraw(account.getBalance(), transaction.getAmount()));
-
-        accountService.updateBalance(account);
+        synchronized (this) {
+            account.setBalance(withdraw(account.getBalance(), transaction.getAmount()));
+            accountService.updateBalance(account);
+        }
     }
 
     private void verifyData(Transaction transaction) {

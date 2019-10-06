@@ -44,7 +44,7 @@ public class Account {
         this.name = name;
     }
 
-    public synchronized BigDecimal getBalance() {
+    public BigDecimal getBalance() {
         return convertTwoDecimalPlace(balance);
     }
 
