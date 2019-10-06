@@ -12,7 +12,9 @@ public class Transaction {
     private BigDecimal amount;
     private TransactionType type;
 
-    public Transaction() { }
+    public Transaction() {
+
+    }
 
     public Transaction(Long accountSenderId, Long accountReceiverId, BigDecimal amount, TransactionType type) {
         this.accountSenderId = accountSenderId;
@@ -25,32 +27,16 @@ public class Transaction {
         return accountSenderId;
     }
 
-    public void setAccountSenderId(Long accountSenderId) {
-        this.accountSenderId = accountSenderId;
-    }
-
     public Long getAccountReceiverId() {
         return accountReceiverId;
-    }
-
-    public void setAccountReceiverId(Long accountReceiverId) {
-        this.accountReceiverId = accountReceiverId;
     }
 
     public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
-    }
-
     public TransactionType getType() {
         return type;
-    }
-
-    public void setType(TransactionType type) {
-        this.type = type;
     }
 
     @Override
