@@ -1,5 +1,7 @@
 package com.api.account.model;
 
+import com.api.account.exception.BusinessException;
+
 import java.math.BigDecimal;
 
 import static com.api.account.utils.NumericConverter.convertTwoDecimalPlace;
@@ -34,7 +36,7 @@ public class Account {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(String name) throws BusinessException {
         this.name = name;
     }
 

@@ -20,38 +20,53 @@ public class AccountResource {
     public static void create(HttpServerExchange exchange) {
         handleStatusAndHeaders(exchange, HTTP_CREATED_STATUS);
         exchange.getRequestReceiver().receiveFullString((serverExchange, message) -> {
-            Account account = readFromJson(message, new TypeReference<>() {});
-            if (account != null) {
-                accountService.save(account);
-                exchange.getResponseSender().send("Account created successfully");
+            try {
+                Account account = readFromJson(message, new TypeReference<>() {});
+                if (account != null) {
+                    account = accountService.save(account);
+                    exchange.getResponseSender().send(convertToJson(account));
+                }
+            } catch (BusinessException e) {
+                handleApplicationException(exchange, e);
+            } catch (Exception e) {
+                handleApplicationException(exchange, e);
             }
         });
     }
 
     public static void update(HttpServerExchange exchange) {
-        handleStatusAndHeaders(exchange, HTTP_CREATED_STATUS);
+        handleStatusAndHeaders(exchange, HTTP_OK_STATUS);
         String id = getQueryParameter(exchange);
         exchange.getRequestReceiver().receiveFullString((serverExchange, message) -> {
-            Account account = readFromJson(message, new TypeReference<>() {});
-            if (account != null) {
-                try {
+            try {
+                Account account = readFromJson(message, new TypeReference<>() {});
+                if (account != null) {
                     account.setId(Long.valueOf(id));
-                    accountService.save(account);
-                    exchange.getResponseSender().send("Account updated successfully");
-                } catch (BusinessException e) {
-                    handleException(exchange, e);
+                    account = accountService.save(account);
+
+                    /* In this case the balance is not updated, so it is necessary to get real balance from database,
+                    because balance just need can modified using transactions service */
+
+                    account = accountService.findById(account.getId());
+                    exchange.getResponseSender().send(convertToJson(account));
                 }
+            } catch (BusinessException e) {
+                handleApplicationException(exchange, e);
+            } catch (Exception e) {
+                handleApplicationException(exchange, e);
             }
         });
     }
 
     public static void delete(HttpServerExchange exchange) {
         handleStatusAndHeaders(exchange, HTTP_NO_CONTENT_STATUS);
-        String id = getQueryParameter(exchange);
         try {
+            String id = getQueryParameter(exchange);
             accountService.delete(Long.valueOf(id));
         } catch (BusinessException e) {
-            handleException(exchange, e);
+            handleApplicationException(exchange, e);
+        } catch (Exception e) {
+            handleApplicationException(exchange, e);
         }
     }
 
@@ -61,18 +76,22 @@ public class AccountResource {
             List<Account> accounts = accountService.findAll();
             exchange.getResponseSender().send(convertToJson(accounts));
         } catch(BusinessException e) {
-            handleException(exchange, e);
+            handleApplicationException(exchange, e);
+        } catch (Exception e) {
+            handleApplicationException(exchange, e);
         }
     }
 
     public static void findById(HttpServerExchange exchange) {
         handleStatusAndHeaders(exchange, HTTP_OK_STATUS);
-        String id = getQueryParameter(exchange);
         try {
+            String id = getQueryParameter(exchange);
             Account account = accountService.findById(Long.valueOf(id));
             exchange.getResponseSender().send(convertToJson(account));
         } catch (BusinessException e) {
-            handleException(exchange, e);
+            handleApplicationException(exchange, e);
+        } catch (Exception e) {
+            handleApplicationException(exchange, e);
         }
     }
 
