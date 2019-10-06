@@ -43,11 +43,6 @@ public class AccountResource {
                 if (account != null) {
                     account.setId(Long.valueOf(id));
                     account = accountService.save(account);
-
-                    /* In this case the balance is not updated, so it is necessary to get real balance from database,
-                    because balance just need can modified using transactions service */
-
-                    account = accountService.findById(account.getId());
                     exchange.getResponseSender().send(convertToJson(account));
                 }
             } catch (BusinessException e) {

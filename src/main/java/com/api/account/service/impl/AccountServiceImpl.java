@@ -46,9 +46,13 @@ public class AccountServiceImpl implements AccountService {
     public Account save(Account account) {
         verifyData(account);
         if(account.getId() == null) {
+            verifyBalanceAmount(account);
             return accountDao.insert(account);
         }else {
-            return accountDao.update(account);
+            account = accountDao.update(account);
+            /* In this case the balance is not updated, so it is necessary to get real balance from database,
+                    because balance just need can modified using transactions service */
+            return accountDao.findById(account.getId());
         }
     }
 
@@ -74,11 +78,14 @@ public class AccountServiceImpl implements AccountService {
         if(StringUtils.isBlank(account.getName())) {
             throw new BusinessException(HTTP_BAD_REQUEST_STATUS, "Name must be informed");
         }
-        if(account.getBalance().compareTo(BigDecimal.ZERO) != 0) {
-            throw new BusinessException(HTTP_BAD_REQUEST_STATUS, "Balance is not allowed to be saved for this operation");
-        }
         if(account.getId() != null) {
             verifyIfExists(account.getId());
+        }
+    }
+
+    private void verifyBalanceAmount(Account account) {
+        if(account.getBalance().compareTo(BigDecimal.ZERO) != 0) {
+            throw new BusinessException(HTTP_BAD_REQUEST_STATUS, "Balance is not allowed to be saved for this operation");
         }
     }
 

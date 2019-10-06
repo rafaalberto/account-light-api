@@ -32,7 +32,7 @@ public class AccountDaoImplTest {
 
     @Test
     public void update() {
-        Account accountInserted = accountDao.insert(new Account("Maria"));
+        Account accountInserted = accountDao.insert(new Account("Mary"));
         Account accountUpdated = accountDao.update(new Account(accountInserted.getId(),"Rafael"));
         assertThat(accountUpdated.getName()).isEqualTo("Rafael");
     }
@@ -59,19 +59,19 @@ public class AccountDaoImplTest {
 
     @Test
     public void updateBalance() {
-        Account accountInserted = accountDao.insert(new Account("Maria"));
+        Account accountInserted = accountDao.insert(new Account("Mary"));
         accountInserted.setBalance(new BigDecimal(2000));
 
         Account accountBalanceUpdated = accountDao.updateBalance(accountInserted);
 
-        assertThat(accountBalanceUpdated.getName()).isEqualTo("Maria");
+        assertThat(accountBalanceUpdated.getName()).isEqualTo("Mary");
         assertThat(accountBalanceUpdated.getBalance()).isEqualTo(convertTwoDecimalPlace(new BigDecimal(2000)));
     }
 
     @Test
     public void updateBalanceByTransfer() {
         Account accountSender = accountDeposit("Rafael", new BigDecimal(1000));
-        Account accountReceiver = accountDeposit("Maria", new BigDecimal(500));
+        Account accountReceiver = accountDeposit("Mary", new BigDecimal(500));
         accountTransfer(accountSender, accountReceiver, new BigDecimal(200));
         verifyAccountsBalanceAfterTransfer(accountSender, accountReceiver);
     }
