@@ -5,10 +5,10 @@ import com.api.account.model.Account;
 import com.api.account.model.Transaction;
 import com.api.account.service.AccountService;
 import com.api.account.service.TransactionService;
+import com.api.account.utils.HttpUtils;
 
-import java.math.BigDecimal;
-
-import static com.api.account.utils.HttpUtils.HTTP_BAD_REQUEST_STATUS;
+import static com.api.account.service.CalculationService.deposit;
+import static com.api.account.service.CalculationService.withdraw;
 
 public class TransferServiceImpl implements TransactionService {
 
@@ -22,11 +22,18 @@ public class TransferServiceImpl implements TransactionService {
     public void execute(Transaction transaction) {
         Account accountSender = accountService.findById(transaction.getAccountSenderId());
         Account accountReceiver = accountService.findById(transaction.getAccountReceiverId());
-        if(accountSender.getBalance().compareTo(transaction.getAmount()) < BigDecimal.ZERO.intValue()) {
-            throw new BusinessException(HTTP_BAD_REQUEST_STATUS, "Insufficient funds");
-        }
-        accountSender.withdraw(transaction.getAmount());
-        accountReceiver.deposit(transaction.getAmount());
+
+        verifyData(transaction);
+
+        accountSender.setBalance(withdraw(accountSender.getBalance(), transaction.getAmount()));
+        accountReceiver.setBalance(deposit(accountReceiver.getBalance(), transaction.getAmount()));
+
         accountService.updateBalanceByTransaction(accountSender, accountReceiver);
+    }
+
+    private void verifyData(Transaction transaction) {
+        if(transaction.getAccountSenderId().equals(transaction.getAccountReceiverId())) {
+            throw new BusinessException(HttpUtils.HTTP_BAD_REQUEST_STATUS, "Account Sender and Receiver must be different");
+        }
     }
 }

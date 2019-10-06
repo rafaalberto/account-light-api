@@ -8,6 +8,8 @@ import org.junit.Test;
 import java.math.BigDecimal;
 import java.util.List;
 
+import static com.api.account.service.CalculationService.deposit;
+import static com.api.account.service.CalculationService.withdraw;
 import static com.api.account.utils.NumericConverter.convertTwoDecimalPlace;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -76,14 +78,14 @@ public class AccountDaoImplTest {
 
     private Account accountDeposit(String rafael, BigDecimal amount) {
         Account accountSender = accountDao.insert(new Account(rafael));
-        accountSender.deposit(amount);
+        accountSender.setBalance(deposit(accountSender.getBalance(), amount));
         accountSender = accountDao.update(accountSender);
         return accountSender;
     }
 
     private void accountTransfer(Account accountSender, Account accountReceiver, BigDecimal amount) {
-        accountSender.withdraw(amount);
-        accountReceiver.deposit(amount);
+        accountSender.setBalance(withdraw(accountSender.getBalance(), amount));
+        accountReceiver.setBalance(deposit(accountReceiver.getBalance(), amount));
         accountDao.updateBalanceByTransfer(accountSender, accountReceiver);
     }
 

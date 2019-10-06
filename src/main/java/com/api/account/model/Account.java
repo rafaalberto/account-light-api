@@ -45,13 +45,5 @@ public class Account {
     public void setBalance(BigDecimal balance) {
         this.balance = balance;
     }
-
-    public void deposit(BigDecimal amount) {
-        this.balance = balance.add(amount);
-    }
-
-    public void withdraw(BigDecimal amount) {
-        this.balance = balance.subtract(amount);
-    }
-
+    
 }

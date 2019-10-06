@@ -21,7 +21,7 @@ public class AccountApiApplication {
         Undertow server = builder.build();
         server.start();
 
-        LOGGER.info("Server connected at " + APP_PORT);
+        LOGGER.info("Application started at " + APP_PORT);
 
         DatabaseConnection.connect();
         DatabaseConnection.createTables();

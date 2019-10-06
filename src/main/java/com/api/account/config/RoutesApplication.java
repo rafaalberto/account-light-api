@@ -10,7 +10,7 @@ import static io.undertow.util.Methods.*;
 public abstract class RoutesApplication {
 
     public static final RoutingHandler ROUTES = new RoutingHandler()
-            .add(GET, "/", RoutesApplication::handleRequest)
+            .add(GET, "/", RoutesApplication::index)
             .add(GET, "/accounts", AccountResource::findAll)
             .add(GET, "/accounts/{id}", AccountResource::findById)
             .add(POST, "/accounts", AccountResource::create)
@@ -18,7 +18,7 @@ public abstract class RoutesApplication {
             .add(DELETE, "/accounts/{id}", AccountResource::delete)
             .add(POST, "/transactions", TransactionResource::execute);
 
-    private static void handleRequest(HttpServerExchange exchange) {
+    private static void index(HttpServerExchange exchange) {
         exchange.getResponseSender().send("Application Started");
     }
 }

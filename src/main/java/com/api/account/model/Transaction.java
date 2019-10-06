@@ -3,6 +3,7 @@ package com.api.account.model;
 import com.api.account.enumeration.TransactionType;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 public class Transaction {
 
@@ -45,5 +46,18 @@ public class Transaction {
         this.type = type;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Transaction that = (Transaction) o;
+        return Objects.equals(accountSenderId, that.accountSenderId) &&
+                Objects.equals(accountReceiverId, that.accountReceiverId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(accountSenderId, accountReceiverId);
+    }
 }
 

@@ -5,10 +5,9 @@ import com.api.account.model.Account;
 import com.api.account.model.Transaction;
 import com.api.account.service.AccountService;
 import com.api.account.service.TransactionService;
+import com.api.account.utils.HttpUtils;
 
-import java.math.BigDecimal;
-
-import static com.api.account.utils.HttpUtils.HTTP_BAD_REQUEST_STATUS;
+import static com.api.account.service.CalculationService.withdraw;
 
 public class WithdrawServiceImpl implements TransactionService {
 
@@ -21,11 +20,18 @@ public class WithdrawServiceImpl implements TransactionService {
     @Override
     public void execute(Transaction transaction) {
         Account account = accountService.findById(transaction.getAccountSenderId());
-        if(account.getBalance().compareTo(transaction.getAmount()) < BigDecimal.ZERO.intValue()) {
-            throw new BusinessException(HTTP_BAD_REQUEST_STATUS, "Insufficient funds");
-        }
-        account.withdraw(transaction.getAmount());
+
+        verifyData(transaction);
+
+        account.setBalance(withdraw(account.getBalance(), transaction.getAmount()));
+
         accountService.updateBalance(account);
+    }
+
+    private void verifyData(Transaction transaction) {
+        if(!transaction.getAccountSenderId().equals(transaction.getAccountReceiverId())) {
+            throw new BusinessException(HttpUtils.HTTP_BAD_REQUEST_STATUS, "Account Sender and Receiver must be the same");
+        }
     }
 
 }
