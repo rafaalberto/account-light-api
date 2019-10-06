@@ -24,7 +24,6 @@ public class AccountApiApplication {
         LOGGER.info("Application started at " + APP_PORT);
 
         DatabaseConnection.connect();
-        DatabaseConnection.createTables();
     }
 
 }

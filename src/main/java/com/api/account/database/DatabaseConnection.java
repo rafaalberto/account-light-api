@@ -22,6 +22,8 @@ public class DatabaseConnection {
             LOGGER.info("Database connected");
             connection.close();
             LOGGER.info("Connection closed");
+            createTables();
+            LOGGER.info("Tables created");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -40,6 +42,7 @@ public class DatabaseConnection {
 
         } catch (SQLException e) {
             e.printStackTrace();
+            LOGGER.error(e.getMessage());
         } finally {
             try {
                 if (statement != null) {
@@ -50,6 +53,7 @@ public class DatabaseConnection {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
+                LOGGER.error(e.getMessage());
             }
         }
     }
