@@ -11,6 +11,8 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.api.account.utils.NumericConverter.convertTwoDecimalPlace;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -34,7 +36,7 @@ public class AccountServiceImplTest {
     }
 
     @Test
-    public void createAccountSuccessfully() {
+    public void shouldCreateAccountSuccessfully() {
         Account accountToCreate = new Account( "Rafael");
         when(accountDao.insert(accountToCreate)).thenReturn(accountInDB);
         Account accountCreated = accountService.save(accountToCreate);
@@ -64,7 +66,7 @@ public class AccountServiceImplTest {
     }
 
     @Test
-    public void updateAccountSuccessfullyNoBalance() {
+    public void shouldUpdateAccountSuccessfullyNoBalance() {
         Account accountToUpdate = new Account(1L, "John");
         when(accountDao.findById(1L)).thenReturn(accountInDB);
         when(accountDao.update(accountToUpdate)).thenReturn(accountToUpdate);
@@ -77,7 +79,7 @@ public class AccountServiceImplTest {
     }
 
     @Test
-    public void updateAccountSuccessfullyWithBalance() {
+    public void shouldUpdateAccountSuccessfullyWithBalance() {
 
         /* This account already has 3000 in balance */
         accountInDB.setBalance(convertTwoDecimalPlace(new BigDecimal(3000)));
@@ -109,5 +111,47 @@ public class AccountServiceImplTest {
         assertThatExceptionOfType(BusinessException.class).isThrownBy(() ->
                 accountService.save(accountToUpdate)).withMessage("Name must be informed");
     }
+
+    @Test
+    public void shouldDenyDeleteAccountIfNotFound() {
+        when(accountDao.findById(1L)).thenReturn(null);
+        assertThatExceptionOfType(BusinessException.class).isThrownBy(() ->
+                accountService.delete(1L)).withMessage("Account not found");
+    }
+
+    @Test
+    public void shouldFindAccountById() {
+        Account accountFound = new Account(1L, "Rafael");
+        when(accountDao.findById(accountFound.getId())).thenReturn(accountFound);
+        accountFound = accountService.findById(accountFound.getId());
+        assertThat(accountFound.getName()).isEqualTo("Rafael");
+    }
+
+    @Test
+    public void shouldNotFindAccountById() {
+        when(accountDao.findById(1L)).thenReturn(null);
+        assertThatExceptionOfType(BusinessException.class).isThrownBy(() ->
+                accountService.findById(1L)).withMessage("Account not found");
+    }
+
+    @Test
+    public void shouldFindAccounts() {
+        List<Account> accountsFound = new ArrayList<>();
+        accountsFound.add(new Account(1L, "Rafael"));
+        accountsFound.add(new Account(2L, "Mary"));
+        accountsFound.add(new Account(3L, "Pedro"));
+        when(accountDao.findAll()).thenReturn(accountsFound);
+        accountsFound = accountService.findAll();
+        assertThat(accountsFound.size()).isEqualTo(3);
+    }
+
+    @Test
+    public void shouldNotFindAccounts() {
+        when(accountDao.findAll()).thenReturn(new ArrayList<>());
+        assertThatExceptionOfType(BusinessException.class).isThrownBy(() ->
+                accountService.findAll()).withMessage("No accounts found");
+    }
+
+
 
 }
