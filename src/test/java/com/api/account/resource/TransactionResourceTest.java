@@ -8,22 +8,21 @@ import com.api.account.repository.impl.AccountDaoImpl;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.undertow.Undertow;
-import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.Map;
 
 import static com.api.account.config.RoutesApplication.ROUTES;
-import static com.api.account.enumeration.TransactionType.DEPOSIT;
+import static com.api.account.enumeration.TransactionType.*;
 import static com.api.account.utils.HttpUtils.*;
 import static com.api.account.utils.NumericConverter.convertTwoDecimalPlace;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class TransactionResourceTest {
+
+    private static final String RESOURCE_PATH = "/transactions";
 
     private AccountDao accountDao = new AccountDaoImpl();
 
@@ -42,28 +41,124 @@ public class TransactionResourceTest {
 
     @Test
     public void shouldDepositSuccessfully() {
-        Account account = accountDao.insert(new Account("Rafael"));
+        Account accountInserted = insertAccount(new Account("Mary"));
 
-        Transaction transaction = new Transaction(account.getId(), account.getId(), convertTwoDecimalPlace(new BigDecimal(1000)), DEPOSIT);
+        Transaction transaction = new Transaction(accountInserted.getId(), accountInserted.getId(), convertTwoDecimalPlace(new BigDecimal(1000)), DEPOSIT);
 
-        int status = RestAssured.given().contentType(ContentType.JSON).body(transaction).post("/transactions").statusCode();
-        assertThat(status).isEqualTo(201);
+        Message result = RestAssured.given().contentType(ContentType.JSON)
+                .body(transaction)
+                .post(RESOURCE_PATH)
+                .then().statusCode(HTTP_CREATED_STATUS).extract().as(Message.class);
+
+        assertThat(result.getDescription()).isEqualTo("Deposit executed successfully");
+
+        deleteAccount(accountInserted.getId());
     }
 
-//    @Test
-//    public void shouldDenyToCreateAccount() {
-//        Account accountToInsert = new Account("");
-//
-//        Message result = RestAssured.given().contentType(ContentType.JSON)
-//                .body(accountToInsert)
-//                .post("/accounts")
-//                .then().statusCode(HTTP_BAD_REQUEST_STATUS).extract().as(Message.class);
-//        assertThat(result.getDescription()).isEqualTo("Name must be informed");
-//    }
+    @Test
+    public void shouldDenyDepositWithAccountNotFound() {
+        Account accountNotFound = new Account(1L, "Rafael");
+
+        Transaction transaction = new Transaction(accountNotFound.getId(), accountNotFound.getId(), convertTwoDecimalPlace(new BigDecimal(1000)), DEPOSIT);
+
+        Message result = RestAssured.given().contentType(ContentType.JSON)
+                .body(transaction)
+                .post(RESOURCE_PATH)
+                .then().statusCode(HTTP_NOT_FOUND_STATUS).extract().as(Message.class);
+
+        assertThat(result.getDescription()).isEqualTo("Account not found");
+    }
+
+    @Test
+    public void shouldWithdrawSuccessfully() {
+        Account accountInserted = insertAccount(new Account("Mary"));
+        accountInserted.setBalance(convertTwoDecimalPlace(new BigDecimal(2000)));
+        updateBalance(accountInserted);
+
+        Transaction transaction = new Transaction(accountInserted.getId(), accountInserted.getId(), convertTwoDecimalPlace(new BigDecimal(1000)), WITHDRAW);
+
+        Message result = RestAssured.given().contentType(ContentType.JSON)
+                .body(transaction)
+                .post(RESOURCE_PATH)
+                .then().statusCode(HTTP_CREATED_STATUS).extract().as(Message.class);
+
+        assertThat(result.getDescription()).isEqualTo("Withdraw executed successfully");
+
+        deleteAccount(accountInserted.getId());
+    }
+
+    @Test
+    public void shouldDenyWithdrawWithInsufficientFunds() {
+        Account accountInserted = insertAccount(new Account("Mary"));
+
+        Transaction transaction = new Transaction(accountInserted.getId(), accountInserted.getId(), convertTwoDecimalPlace(new BigDecimal(1000)), WITHDRAW);
+
+        Message result = RestAssured.given().contentType(ContentType.JSON)
+                .body(transaction)
+                .post(RESOURCE_PATH)
+                .then().statusCode(HTTP_BAD_REQUEST_STATUS).extract().as(Message.class);
+
+        assertThat(result.getDescription()).isEqualTo("Insufficient funds");
+
+        deleteAccount(accountInserted.getId());
+    }
+
+    @Test
+    public void shouldTransferSuccessfully() {
+        Account accountSender = insertAccount(new Account("Mary"));
+        accountSender.setBalance(convertTwoDecimalPlace(new BigDecimal(2000)));
+        updateBalance(accountSender);
+
+        Account accountReceiver = insertAccount(new Account("Rafael"));
+        accountReceiver.setBalance(convertTwoDecimalPlace(new BigDecimal(1000)));
+        updateBalance(accountReceiver);
+
+        Transaction transaction = new Transaction(accountSender.getId(), accountReceiver.getId(), convertTwoDecimalPlace(new BigDecimal(1000)), TRANSFER);
+
+        Message result = RestAssured.given().contentType(ContentType.JSON)
+                .body(transaction)
+                .post(RESOURCE_PATH)
+                .then().statusCode(HTTP_CREATED_STATUS).extract().as(Message.class);
+
+        assertThat(result.getDescription()).isEqualTo("Transfer executed successfully");
+
+        deleteAccount(accountSender.getId());
+        deleteAccount(accountReceiver.getId());
+    }
+
+    @Test
+    public void shouldDenyTransferWithSameAccount() {
+        Account accountSender = insertAccount(new Account("Mary"));
+        accountSender.setBalance(convertTwoDecimalPlace(new BigDecimal(2000)));
+        updateBalance(accountSender);
+
+        Transaction transaction = new Transaction(accountSender.getId(), accountSender.getId(), convertTwoDecimalPlace(new BigDecimal(1000)), TRANSFER);
+
+        Message result = RestAssured.given().contentType(ContentType.JSON)
+                .body(transaction)
+                .post(RESOURCE_PATH)
+                .then().statusCode(HTTP_BAD_REQUEST_STATUS).extract().as(Message.class);
+
+        assertThat(result.getDescription()).isEqualTo("Account Sender and Receiver must be different");
+
+        deleteAccount(accountSender.getId());
+    }
 
     @After
     public void finish() {
         server.stop();
+        accountDao.deleteAll();
     }
 
+    private Account insertAccount(Account account) {
+        return accountDao.insert(account);
+    }
+
+    private void updateBalance(Account account) {
+        accountDao.updateBalance(account);
+    }
+
+    private void deleteAccount(Long accountId) {
+        accountDao.delete(accountId);
+    }
 }

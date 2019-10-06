@@ -20,6 +20,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class AccountResourceTest {
 
+    private static final String RESOURCE_PATH = "/accounts";
+
     private AccountDao accountDao = new AccountDaoImpl();
 
     private Undertow server;
@@ -36,14 +38,15 @@ public class AccountResourceTest {
     }
 
     @Test
-    public void shouldCreateAccount() {
+    public void shouldCreateAccountSuccessfully() {
         Account accountToInsert = new Account("Mary");
         Account accountInserted = insertAccount(accountToInsert);
 
         Account result = RestAssured.given().contentType(ContentType.JSON)
                 .body(accountToInsert)
-                .post("/accounts")
+                .post(RESOURCE_PATH)
                 .then().statusCode(HTTP_CREATED_STATUS).extract().as(Account.class);
+
         assertThat(result.getName()).isEqualTo("Mary");
         assertThat(result.getBalance()).isEqualTo(NumericConverter.convertTwoDecimalPlace(BigDecimal.ZERO));
 
@@ -56,34 +59,36 @@ public class AccountResourceTest {
 
         Message result = RestAssured.given().contentType(ContentType.JSON)
                 .body(accountToInsert)
-                .post("/accounts")
+                .post(RESOURCE_PATH)
                 .then().statusCode(HTTP_BAD_REQUEST_STATUS).extract().as(Message.class);
+
         assertThat(result.getDescription()).isEqualTo("Name must be informed");
     }
 
     @Test
-    public void shouldDeleteAccount() {
+    public void shouldDeleteAccountSuccessfully() {
         Account accountToInsert = new Account("Mary");
         Account accountInserted = insertAccount(accountToInsert);
 
         RestAssured.given().contentType(ContentType.JSON)
                 .body(accountToInsert)
-                .delete("/accounts/" + accountInserted.getId())
+                .delete(RESOURCE_PATH + "/" + accountInserted.getId())
                 .then().statusCode(HTTP_NO_CONTENT_STATUS);
 
         deleteAccount(accountInserted.getId());
     }
 
     @Test
-    public void shouldFindById() {
+    public void shouldFindByIdSuccessfully() {
         Account accountToInsert = new Account("Mary");
         Account accountInserted = insertAccount(accountToInsert);
 
         Account result = RestAssured.given().contentType(ContentType.JSON)
                 .body(accountToInsert)
-                .get("/accounts/" + accountInserted.getId())
+                .get(RESOURCE_PATH + "/" + accountInserted.getId())
                 .then().statusCode(HTTP_OK_STATUS).extract().as(Account.class);
-        assertThat(result.getName()).isEqualTo("Rafael");
+
+        assertThat(result.getName()).isEqualTo("Mary");
         assertThat(result.getBalance()).isEqualTo(NumericConverter.convertTwoDecimalPlace(BigDecimal.ZERO));
 
         deleteAccount(accountInserted.getId());
@@ -94,7 +99,7 @@ public class AccountResourceTest {
         Account accountToFind = new Account(999L, "Rafael");
         RestAssured.given().contentType(ContentType.JSON)
                 .body(accountToFind)
-                .get("/accounts/" + accountToFind.getId())
+                .get(RESOURCE_PATH + "/" + accountToFind.getId())
                 .then().statusCode(HTTP_NOT_FOUND_STATUS).extract().as(Message.class);
     }
 
