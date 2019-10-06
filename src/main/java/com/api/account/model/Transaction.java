@@ -14,6 +14,13 @@ public class Transaction {
 
     public Transaction() { }
 
+    public Transaction(Long accountSenderId, Long accountReceiverId, BigDecimal amount, TransactionType type) {
+        this.accountSenderId = accountSenderId;
+        this.accountReceiverId = accountReceiverId;
+        this.amount = amount;
+        this.type = type;
+    }
+
     public Long getAccountSenderId() {
         return accountSenderId;
     }

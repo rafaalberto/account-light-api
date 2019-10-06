@@ -22,7 +22,7 @@ public class AccountDaoImplTest {
     }
 
     @Test
-    public void insert() {
+    public void shouldInsert() {
         Account accountInserted = accountDao.insert(new Account("Rafael"));
         accountInserted = accountDao.findById(accountInserted.getId());
 
@@ -31,14 +31,15 @@ public class AccountDaoImplTest {
     }
 
     @Test
-    public void update() {
+    public void shouldUpdate() {
         Account accountInserted = accountDao.insert(new Account("Mary"));
         Account accountUpdated = accountDao.update(new Account(accountInserted.getId(),"Rafael"));
+
         assertThat(accountUpdated.getName()).isEqualTo("Rafael");
     }
 
     @Test
-    public void delete() {
+    public void shouldDelete() {
         Account accountInserted = accountDao.insert(new Account("Rafael"));
         Account accountFound = accountDao.findById(accountInserted.getId());
         accountDao.delete(accountFound.getId());
@@ -49,7 +50,7 @@ public class AccountDaoImplTest {
     /* Unit Test to findById doesn't need to implement because this one is has used in the previous tests */
 
     @Test
-    public void findAll() {
+    public void shouldFindAll() {
         accountDao.insert(new Account("Rafael"));
         accountDao.insert(new Account("John"));
         accountDao.insert(new Account("Pedro"));
@@ -58,7 +59,7 @@ public class AccountDaoImplTest {
     }
 
     @Test
-    public void updateBalance() {
+    public void shouldUpdateBalance() {
         Account accountInserted = accountDao.insert(new Account("Mary"));
         accountInserted.setBalance(new BigDecimal(2000));
 
@@ -69,7 +70,7 @@ public class AccountDaoImplTest {
     }
 
     @Test
-    public void updateBalanceByTransfer() {
+    public void shouldUpdateBalanceByTransfer() {
         Account accountSender = accountDeposit("Rafael", new BigDecimal(1000));
         Account accountReceiver = accountDeposit("Mary", new BigDecimal(500));
         accountTransfer(accountSender, accountReceiver, new BigDecimal(200));

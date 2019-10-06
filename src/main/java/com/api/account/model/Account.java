@@ -1,7 +1,5 @@
 package com.api.account.model;
 
-import com.api.account.exception.BusinessException;
-
 import java.math.BigDecimal;
 
 import static com.api.account.utils.NumericConverter.convertTwoDecimalPlace;
@@ -24,6 +22,12 @@ public class Account {
         this.name = name;
     }
 
+    public Account(Long id, String name, BigDecimal balance) {
+        this.id = id;
+        this.name = name;
+        this.balance = balance;
+    }
+
     public Long getId() {
         return id;
     }
@@ -36,7 +40,7 @@ public class Account {
         return name;
     }
 
-    public void setName(String name) throws BusinessException {
+    public void setName(String name) {
         this.name = name;
     }
 

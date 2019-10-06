@@ -21,7 +21,7 @@ import static org.mockito.Mockito.when;
 
 public class AccountServiceImplTest {
 
-    private Account accountInDB;
+    private Account account;
 
     private AccountService accountService;
 
@@ -32,13 +32,13 @@ public class AccountServiceImplTest {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         accountService = new AccountServiceImpl(accountDao);
-        accountInDB = new Account(1L, "Rafael");
+        account = new Account(1L, "Rafael");
     }
 
     @Test
     public void shouldCreateAccountSuccessfully() {
         Account accountToCreate = new Account( "Rafael");
-        when(accountDao.insert(accountToCreate)).thenReturn(accountInDB);
+        when(accountDao.insert(accountToCreate)).thenReturn(account);
         Account accountCreated = accountService.save(accountToCreate);
 
         assertThat(accountCreated.getId()).isEqualTo(1L);
@@ -49,7 +49,7 @@ public class AccountServiceImplTest {
     @Test
     public void shouldDenyCreateAccountIfNameNotInformed() {
         Account accountToCreate = new Account( " ");
-        when(accountDao.insert(accountToCreate)).thenReturn(accountInDB);
+        when(accountDao.insert(accountToCreate)).thenReturn(account);
 
         assertThatExceptionOfType(BusinessException.class).isThrownBy(() ->
                 accountService.save(accountToCreate)).withMessage("Name must be informed");
@@ -59,7 +59,7 @@ public class AccountServiceImplTest {
     public void shouldDenyCreateAccountIfBalanceGreaterThanZero() {
         Account accountToCreate = new Account( "Rafael");
         accountToCreate.setBalance(convertTwoDecimalPlace(new BigDecimal(3000)));
-        when(accountDao.insert(accountToCreate)).thenReturn(accountInDB);
+        when(accountDao.insert(accountToCreate)).thenReturn(account);
 
         assertThatExceptionOfType(BusinessException.class).isThrownBy(() ->
                 accountService.save(accountToCreate)).withMessage("Balance is not allowed to be saved for this operation");
@@ -68,7 +68,7 @@ public class AccountServiceImplTest {
     @Test
     public void shouldUpdateAccountSuccessfullyNoBalance() {
         Account accountToUpdate = new Account(1L, "John");
-        when(accountDao.findById(1L)).thenReturn(accountInDB);
+        when(accountDao.findById(1L)).thenReturn(account);
         when(accountDao.update(accountToUpdate)).thenReturn(accountToUpdate);
         when(accountDao.findById(1L)).thenReturn(accountToUpdate);
         Account accountUpdated = accountService.save(accountToUpdate);
@@ -82,8 +82,8 @@ public class AccountServiceImplTest {
     public void shouldUpdateAccountSuccessfullyWithBalance() {
 
         /* This account already has 3000 in balance */
-        accountInDB.setBalance(convertTwoDecimalPlace(new BigDecimal(3000)));
-        when(accountDao.findById(1L)).thenReturn(accountInDB);
+        account.setBalance(convertTwoDecimalPlace(new BigDecimal(3000)));
+        when(accountDao.findById(1L)).thenReturn(account);
 
         /* even if we put the balance to update, the app will not do that,
         because only transactions operations are allowed to do it */
@@ -105,7 +105,7 @@ public class AccountServiceImplTest {
     @Test
     public void shouldDenyUpdateAccountIfNameNotInformed() {
         Account accountToUpdate = new Account(1L, "  ");
-        when(accountDao.findById(1L)).thenReturn(accountInDB);
+        when(accountDao.findById(1L)).thenReturn(account);
         when(accountDao.update(accountToUpdate)).thenReturn(accountToUpdate);
 
         assertThatExceptionOfType(BusinessException.class).isThrownBy(() ->
@@ -151,7 +151,5 @@ public class AccountServiceImplTest {
         assertThatExceptionOfType(BusinessException.class).isThrownBy(() ->
                 accountService.findAll()).withMessage("No accounts found");
     }
-
-
 
 }
