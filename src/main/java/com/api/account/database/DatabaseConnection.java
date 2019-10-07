@@ -23,7 +23,6 @@ public class DatabaseConnection {
             connection.close();
             LOGGER.info("Connection closed");
             createTables();
-            LOGGER.info("Tables created");
         } catch (SQLException e) {
             e.printStackTrace();
         }
