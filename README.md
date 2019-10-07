@@ -1,6 +1,6 @@
 # Coding Challenge: Providing a RESTful API Java for Banking Account Management.
 
-The reason for this app is providing a solution without Heavy frameworks <br/>
+The reason for this app is providing a solution without heavy frameworks <br/>
 The App works by saving, listing, deleting Banking Accounts and transferring money among them. <br/>
 The main technologies are: <br/>
 
